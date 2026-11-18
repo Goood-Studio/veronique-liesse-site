@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro';
+import FormInscription from '../components/FormInscription.astro';
+import CarteFormation from '../components/CarteFormation.astro';
+import { FORMATIONS_PUBLIEES, LIVRES, PRESSE } from '../data/cms';
+import { SITE, PHASE, WEBINAIRE, OFFRE, u } from '../data/site';
+
+const vedettes = ['insulinoresistance', 'microbiote-nouvelle-star-de-la-sante', 'nutrition-du-sportif', 'formation-microbiote-vaginal', 'sibo-une-dysbiose-pas-comme-les-autres', 'marier-dietetique-et-micronutrition']
+  .map((s) => FORMATIONS_PUBLIEES.find((f) => f.slug === s))
+  .filter((f) => f !== undefined);
+const metiers = ['Diététicien·nes', 'Nutritionnistes', 'Nutrithérapeutes', 'Naturopathes', 'Médecins', 'Pharmacien·nes', 'Sages-femmes', 'Kinésithérapeutes', 'Ostéopathes', 'Infirmier·ères'];
+---
+<Base
+  titre="Formations en nutrition et micronutrition pour professionnel·les de santé | Véronique Liesse"
+  description={`Formations en ligne en nutrition et micronutrition pour professionnel·les de santé : ménopause, microbiote, insulinorésistance, sport. Plus de ${SITE.inscriptions.toLocaleString('fr-FR')} inscriptions.`}
+  chemin="/"
+>
+  <section class="hero">
+    <div class="conteneur hero-grille">
+      <div class="hero-texte">
+        <p class="etiquette" data-anim="texte">Diététicienne-nutritionniste · Monaco</p>
+        <h1 data-anim="texte">Se former à la micronutrition, avec une praticienne qui l’enseigne</h1>
+        <p class="chapo" data-anim="texte">Des formations en ligne précises, sourcées et directement applicables en consultation, pour les professionnel·les de santé qui veulent aller plus loin que les bases.</p>
+        <div class="actions" data-anim="texte">
+          <a class="btn btn-accent" href={u('/formations/')}>Voir les formations</a>
+          <a class="btn btn-contour" href={u(PHASE === 'attente' ? '/webinaire-menopause/' : '/formation-menopause/')}>
+            {PHASE === 'attente' ? `Webinaire gratuit du ${WEBINAIRE.dateCourte}` : 'La formation ménopause'}
+          </a>
+        </div>
+        <ul class="preuves" data-anim="texte">
+          <li><strong>+{SITE.inscriptions.toLocaleString('fr-FR')}</strong> inscriptions à ses formations en ligne</li>
+          <li><strong>DU de physionutrition</strong> enseignante à Grenoble depuis 2018</li>
+          <li><strong>{LIVRES.length} livres</strong> de nutrition publiés</li>
+        </ul>
+      </div>
+      <div class="hero-photo arche" data-anim="photo">
+        <img src={u('/img/veronique-portrait.webp')} alt="Véronique Liesse, diététicienne-nutritionniste" width="562" height="500" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-mer menopause" aria-labelledby="titre-menopause">
+    <div class="conteneur meno-grille">
+      <div data-reveal>
+        <span class="etiquette">Nouveau · décembre 2026</span>
+        <h2 id="titre-menopause">La ménopause, au-delà des idées reçues</h2>
+        <p>Périménopause, ménopause : vos patientes vous posent des questions de plus en plus précises. Véronique lance sa formation complète pour vous donner des réponses nuancées et sourcées, et des outils concrets pour les accompagner.</p>
+        {PHASE === 'attente' ? (
+          <>
+            <p><strong>Pour la découvrir, rendez-vous au webinaire gratuit du {WEBINAIRE.dateLongue}{WEBINAIRE.heureTexte ? ` à ${WEBINAIRE.heureTexte}` : ''}</strong> : « {WEBINAIRE.titre} ».</p>
+            <a class="lien-suite" href={u('/formation-menopause/')}>Ce que contient la formation →</a>
+          </>
+        ) : (
+          <div class="actions">
+            <a class="btn btn-accent" href={u('/formation-menopause/')}>Découvrir la formation · {PHASE === 'vente' ? `${OFFRE.prixLancement} € au lieu de ${OFFRE.prix} €` : `${OFFRE.prix} €`}</a>
+          </div>
+        )}
+      </div>
+      {PHASE === 'attente' && (
+        <div class="carte-form" data-reveal>
+          <p class="titre-form">Réservez votre place</p>
+          <p class="petit">Gratuit · {WEBINAIRE.dureeMin} minutes · replay envoyé à toutes les personnes inscrites</p>
+          <FormInscription id="inscription-accueil" source="accueil" />
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="titre-formations">
+    <div class="conteneur">
+      <div class="entete-section" data-reveal>
+        <div>
+          <h2 id="titre-formations">Les formations en ligne</h2>
+          <p class="chapo">Chaque formation s’achète seule, à un prix accessible. Vous choisissez ce dont vous avez besoin, et vous avancez à votre rythme.</p>
+        </div>
+        <a class="btn btn-contour" href={u('/formations/')}>Les {FORMATIONS_PUBLIEES.length} formations</a>
+      </div>
+      <div class="grille-formations">
+        {vedettes.map((f) => <div data-reveal><CarteFormation f={f!} /></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-sable" aria-labelledby="titre-micro">
+    <div class="conteneur deux-colonnes">
+      <div data-reveal>
+        <h2 id="titre-micro">Pourquoi la micronutrition change une consultation</h2>
+        <p>La micronutrition affine l’approche enseignée pendant les études de diététique. Elle s’intéresse aux micronutriments, aux phytonutriments et aux composés bioactifs : leur rôle dans le fonctionnement du corps, et la façon de les apporter en quantité juste, par l’assiette d’abord, par une correction personnalisée ensuite.</p>
+        <p>Ce n’est ni de la magie ni une approche approximative : c’est une science qui repose sur la physiologie, la biochimie nutritionnelle et des études validées. Elle doit être pratiquée par des professionnel·les de santé formé·es.</p>
+        <a class="lien-suite" href={u('/formations-micronutrition/')}>Se former à la micronutrition →</a>
+      </div>
+      <div data-reveal>
+        <h3>Les formations sont pensées pour</h3>
+        <ul class="metiers">
+          {metiers.map((m) => <li>{m}</li>)}
+        </ul>
+        <p class="petit">Certaines formations sont plus spécifiques à un métier : c’est précisé sur leur page.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="titre-apropos">
+    <div class="conteneur apropos">
+      <div class="arche photo-apropos" data-reveal>
+        <img src={u('/img/veronique-tasse.webp')} alt="Véronique Liesse dans son bureau" width="350" height="350" loading="lazy" />
+      </div>
+      <div data-reveal>
+        <h2 id="titre-apropos">Véronique Liesse</h2>
+        <p class="chapo">Diététicienne-nutritionniste, micronutritionniste, enseignante et auteure. Originaire de Bruxelles, installée à Monaco.</p>
+        <ul class="liste-coche">
+          <li>Enseignante au DU de physionutrition de l’Université de Grenoble depuis 2018, et au CERDEN (Belgique) depuis 2010</li>
+          <li>Nutritionniste d’un club de football professionnel de première division belge depuis 2015</li>
+          <li>Chroniqueuse nutrition sur VivaCité (RTBF) et Radio Monaco</li>
+          <li>Plus de dix ans d’ateliers et de conférences en entreprise</li>
+        </ul>
+        <a class="btn btn-contour" href={u('/veronique-liesse/')}>Son parcours</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-argile" aria-label="Entreprises et consultations">
+    <div class="conteneur rangees">
+      <a class="rangee" href={u('/qvt-en-entreprise-renforcer-qualite-de-vie/')} data-reveal>
+        <span class="num">01</span>
+        <span class="r-texte"><strong>Entreprises</strong> Ateliers, conférences et webinaires nutrition pour la qualité de vie au travail : énergie, sommeil, stress, horaires atypiques, ménopause au travail.</span>
+        <span class="fleche" aria-hidden="true">→</span>
+      </a>
+      <a class="rangee" href={u('/consultation-nutritionniste/')} data-reveal>
+        <span class="num">02</span>
+        <span class="r-texte"><strong>Consultations à Monaco</strong> Nutrition et micronutrition, sur rendez-vous.</span>
+        <span class="fleche" aria-hidden="true">→</span>
+      </a>
+      <a class="rangee" href={u('/mes-livres/')} data-reveal>
+        <span class="num">03</span>
+        <span class="r-texte"><strong>Livres</strong> {LIVRES.length} ouvrages de nutrition pour le grand public.</span>
+        <span class="fleche" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section serree presse" aria-labelledby="titre-presse">
+    <div class="conteneur">
+      <h2 id="titre-presse" class="visually-hidden">Dans les médias</h2>
+      <p class="petit centre">Vue et entendue dans</p>
+      <ul class="medias">
+        {PRESSE.slice(0, 8).map((p) => <li>{p.media.split(' · ')[0]}</li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: clamp(40px, 7vw, 96px) 0 clamp(56px, 8vw, 104px); }
+  .hero-grille { display: grid; grid-template-columns: 1.25fr .85fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .hero-photo { aspect-ratio: 4 / 5; max-width: 440px; justify-self: end; width: 100%; background: var(--sable); }
+  .hero-photo img { object-position: 40% 30%; }
+  .hero h1 { margin-top: 18px; }
+  .preuves { list-style: none; padding: 0; margin: 36px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; border-top: 1px solid var(--line); padding-top: 22px; }
+  .preuves li { font-size: .9rem; color: var(--ink-muted); }
+  .preuves strong { display: block; font-family: var(--font-titre); font-weight: 400; font-size: 1.35rem; color: var(--mer); line-height: 1.2; margin-bottom: 4px; }
+
+  .menopause .etiquette { background: var(--terre-cuite); color: var(--blanc); }
+  .menopause h2 { margin-top: 16px; }
+  .meno-grille { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .carte-form { background: var(--chaux); color: var(--encre); border-radius: 220px 220px 16px 16px; padding: 72px clamp(22px, 4vw, 40px) 32px; }
+  .titre-form { font-family: var(--font-titre); font-size: 1.6rem; color: var(--mer); text-align: center; margin-bottom: 4px; }
+  .carte-form .petit { text-align: center; margin-bottom: 22px; }
+  .lien-suite { font-weight: 600; }
+  .fond-mer .lien-suite { color: var(--chaux); text-decoration-color: var(--ocre); }
+
+  .entete-section { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
+  .entete-section .chapo { margin: 0; }
+  .grille-formations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .grille-formations > div { display: flex; }
+  .grille-formations > div > :global(*) { flex: 1; }
+
+  .deux-colonnes { display: grid; grid-template-columns: 1.2fr .8fr; gap: clamp(32px, 6vw, 80px); }
+  .metiers { list-style: none; padding: 0; margin: 0 0 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .metiers li { background: var(--chaux); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: .92rem; }
+
+  .apropos { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .photo-apropos { aspect-ratio: 4 / 5; max-width: 360px; background: var(--sable); }
+
+  .rangees { display: grid; }
+  .rangee { display: grid; grid-template-columns: 64px 1fr 40px; gap: 20px; align-items: center; padding: 28px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--encre); }
+  .rangee:first-child { border-top: 1px solid var(--line); }
+  .rangee:hover .fleche { transform: translateX(6px); color: var(--terre-cuite); }
+  .num { font-family: var(--font-titre); color: var(--ocre); font-size: 1.4rem; }
+  .r-texte strong { display: block; font-family: var(--font-titre); font-weight: 400; font-size: 1.45rem; color: var(--mer); margin-bottom: 4px; }
+  .fleche { font-size: 1.5rem; color: var(--mer); transition: transform .25s, color .25s; }
+
+  .centre { text-align: center; }
+  .medias { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 36px; font-family: var(--font-titre); font-size: 1.2rem; color: var(--olivier-profond); }
+
+  @media (max-width: 900px) {
+    .hero-grille, .meno-grille, .deux-colonnes, .apropos { grid-template-columns: 1fr; }
+    .hero-photo { order: -1; justify-self: center; max-width: 300px; }
+    .grille-formations { grid-template-columns: 1fr 1fr; }
+    .photo-apropos { max-width: 280px; }
+  }
+  @media (max-width: 600px) {
+    .preuves { grid-template-columns: 1fr; gap: 14px; }
+    .grille-formations { grid-template-columns: 1fr; }
+    .rangee { grid-template-columns: 40px 1fr 24px; gap: 12px; }
+    .carte-form { border-radius: 160px 160px 14px 14px; padding-top: 56px; }
+  }
+</style>

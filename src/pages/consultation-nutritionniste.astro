@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, u } from '../data/site';
+const motifs = [
+  ['Perdre du poids', 'Sans régime restrictif, en comprenant ce qui bloque.'],
+  ['Rééquilibrer son alimentation', 'Faire un bilan approfondi et repartir sur de bonnes bases.'],
+  ['Troubles digestifs', 'Ballonnements, inconfort, intolérances : chercher les causes.'],
+  ['Hormones', 'Thyroïde, cycle, fertilité et périconception, ménopause.'],
+  ['Stress, fatigue, sommeil', 'Retrouver de l’énergie et mieux dormir.'],
+  ['Sportif·ves', 'Performer, récupérer et prévenir les blessures.'],
+  ['Enfants et adolescent·es', 'Un accompagnement adapté à chaque âge.'],
+  ['Pathologie chronique', 'Une alimentation qui accompagne le traitement.'],
+];
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+const lieu = {
+  '@context': 'https://schema.org', '@type': 'MedicalBusiness', name: `Consultations de nutrition, Véronique Liesse (${SITE.consultations.lieu})`,
+  address: { '@type': 'PostalAddress', streetAddress: '2 avenue de Monte-Carlo', addressLocality: 'Monaco', postalCode: '98000', addressCountry: 'MC' },
+  telephone: SITE.consultations.tel, employee: { '@id': racine + '/#veronique-liesse' }, url: racine + '/consultation-nutritionniste/',
+};
+---
+<Base titre="Consultation nutritionniste à Monaco | Véronique Liesse" description="Consultations de nutrition et micronutrition à Monaco avec Véronique Liesse, diététicienne-nutritionniste : poids, troubles digestifs, hormones, fatigue, sport." chemin="/consultation-nutritionniste/" jsonLd={[lieu]}>
+  <section class="hero">
+    <div class="conteneur grille">
+      <div>
+        <p class="etiquette" data-anim="texte">Consultations à Monaco</p>
+        <h1 data-anim="texte">Consultation en nutrition et micronutrition à Monaco</h1>
+        <p class="chapo" data-anim="texte">Je vous écoute, vous conseille et vous accompagne sur une ou plusieurs séances, pour retrouver un état de santé optimal et un meilleur équilibre grâce à la nutrition et à la micronutrition.</p>
+        <div class="rdv" data-anim="texte">
+          <p><strong>{SITE.consultations.lieu}</strong><br />{SITE.consultations.adresse}</p>
+          <a class="btn btn-accent" href={SITE.consultations.telLien}>Prendre rendez-vous : {SITE.consultations.tel}</a>
+        </div>
+      </div>
+      <img class="visuel" src={u('/img/thermes-marins.webp')} alt="Les Thermes Marins Monte-Carlo, face à la Méditerranée" width="540" height="300" data-anim="photo" />
+    </div>
+  </section>
+  <section class="section fond-sable">
+    <div class="conteneur">
+      <h2>Avec quelle consultation puis-je vous aider ?</h2>
+      <div class="motifs">{motifs.map(([t, d]) => <div data-reveal><h3>{t}</h3><p>{d}</p></div>)}</div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="conteneur etroit">
+      <h2>Comment se déroule une consultation ?</h2>
+      <p>La première consultation fait le point sur votre histoire, vos habitudes, vos analyses éventuelles et vos objectifs. Vous repartez avec des conseils concrets, adaptés à votre quotidien, et si besoin une correction micronutritionnelle personnalisée. Les séances suivantes permettent d’ajuster et d’avancer à votre rythme.</p>
+      <p class="petit">Vous êtes professionnel·le de santé ? <a href={u('/formations/')}>Découvrez les formations en ligne</a>.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .hero { padding: clamp(40px, 7vw, 96px) 0; }
+  .grille { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  h1 { margin-top: 16px; }
+  .visuel { border-radius: 200px 200px 14px 14px; aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+  .rdv { display: grid; gap: 14px; justify-items: start; }
+  .motifs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 28px; }
+  .motifs > div { border-top: 2px solid var(--ocre); padding: 18px 0 24px; }
+  .motifs h3 { font-size: 1.15rem; }
+  .motifs p { margin: 0; color: var(--ink-muted); font-size: .95rem; }
+  .etroit { max-width: 760px; }
+  @media (max-width: 900px) { .grille { grid-template-columns: 1fr; } .motifs { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .motifs { grid-template-columns: 1fr; } }
+</style>

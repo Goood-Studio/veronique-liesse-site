@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import legal from '../data/legal.json';
+interface Props { cle: 'mentions-legales' | 'cgv-cgu-confidentialite'; titre: string; description: string }
+const { cle, titre, description } = Astro.props;
+const blocs = (legal as Record<string, [string, string][]>)[cle];
+---
+<Base titre={`${titre} | Véronique Liesse Nutrition`} description={description} chemin={`/${cle}/`}>
+  <section class="section">
+    <div class="conteneur texte-long legal">
+      <h1>{titre}</h1>
+      {blocs.map(([balise, texte]) =>
+        balise === 'h2' ? <h2>{texte}</h2> : balise === 'h3' || balise === 'h4' ? <h3>{texte}</h3> : balise === 'li' ? <p class="puce">{texte}</p> : <p>{texte}</p>
+      )}
+    </div>
+  </section>
+</Base>
+<style>
+  .legal { font-size: .97rem; }
+  .legal h2 { font-size: 1.4rem; }
+  .puce { padding-left: 18px; position: relative; }
+  .puce::before { content: '·'; position: absolute; left: 4px; font-weight: 700; }
+</style>

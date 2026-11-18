@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import FormContact from '../components/FormContact.astro';
+import { SITE, u } from '../data/site';
+---
+<Base titre="Contact | Véronique Liesse Nutrition" description="Contacter Véronique Liesse : une question sur les formations, une intervention en entreprise ou une consultation de nutrition à Monaco." chemin="/contact/">
+  <section class="section serree">
+    <div class="conteneur">
+      <h1>Contact</h1>
+      <p class="chapo">Choisissez votre situation : votre message arrive directement à Véronique.</p>
+    </div>
+  </section>
+  <section class="conteneur onglets-zone">
+    <div class="onglets" role="tablist" aria-label="Votre situation">
+      <button role="tab" aria-selected="true" aria-controls="p-pro" id="t-pro">Professionnel·le de santé</button>
+      <button role="tab" aria-selected="false" aria-controls="p-ent" id="t-ent" tabindex="-1">Entreprise</button>
+      <button role="tab" aria-selected="false" aria-controls="p-part" id="t-part" tabindex="-1">Particulier</button>
+    </div>
+    <div class="panneau" role="tabpanel" id="p-pro" aria-labelledby="t-pro">
+      <p>Une question sur une formation, un accès, une facture ?</p>
+      <FormContact type="pro" id="c-pro" />
+    </div>
+    <div class="panneau" role="tabpanel" id="p-ent" aria-labelledby="t-ent" hidden>
+      <p>Un atelier, une conférence, un webinaire pour vos équipes ? <a href={u('/qvt-en-entreprise-renforcer-qualite-de-vie/')}>Voir les thèmes et formats</a>.</p>
+      <FormContact type="entreprise" id="c-ent" />
+    </div>
+    <div class="panneau" role="tabpanel" id="p-part" aria-labelledby="t-part" hidden>
+      <p>Pour une consultation à Monaco, le rendez-vous se prend auprès des {SITE.consultations.lieu} au <a href={SITE.consultations.telLien}>{SITE.consultations.tel}</a>. <a href={u('/consultation-nutritionniste/')}>En savoir plus</a>.</p>
+      <FormContact type="particulier" id="c-part" />
+    </div>
+  </section>
+  <section class="section serree">
+    <div class="conteneur reseaux">
+      <p>Vous pouvez aussi suivre Véronique sur <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a>, <a href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>, <a href={SITE.facebook} target="_blank" rel="noopener">Facebook</a> et <a href={SITE.youtube} target="_blank" rel="noopener">YouTube</a>.</p>
+    </div>
+  </section>
+</Base>
+<script is:inline>
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[role=tab]'));
+    function choisir(t) {
+      tabs.forEach(function (x) { var on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+      t.focus();
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { choisir(t); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') choisir(tabs[(i + 1) % tabs.length]);
+        if (e.key === 'ArrowLeft') choisir(tabs[(i - 1 + tabs.length) % tabs.length]);
+      });
+    });
+  })();
+</script>
+<style>
+  .onglets-zone { max-width: 820px; }
+  .onglets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .onglets button { font: 600 .98rem var(--font-texte); padding: 12px 18px; min-height: 48px; border-radius: 999px; border: 1.5px solid var(--mer); background: transparent; color: var(--mer); cursor: pointer; }
+  .onglets button[aria-selected='true'] { background: var(--mer); color: var(--chaux); }
+  .panneau { background: var(--blanc); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(20px, 4vw, 36px); }
+  .reseaux { max-width: 820px; }
+</style>

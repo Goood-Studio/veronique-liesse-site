@@ -1,0 +1,83 @@
+---
+// Inscription au webinaire. Trois modes, réglés dans le Sheet :
+// 1) inscription_endpoint rempli : envoi au webhook (n8n → ActiveCampaign + Zoom),
+//    puis page de remerciement ; 2) sinon inscription_url : renvoi vers
+//    l'inscription Zoom ; 3) sinon : message d'attente (recette).
+import { WEBINAIRE, u } from '../data/site';
+interface Props { id?: string; source?: string; sombre?: boolean }
+const { id = 'inscription', source = 'site', sombre = false } = Astro.props;
+const professions = [
+  'Diététicien·ne', 'Nutritionniste', 'Nutrithérapeute', 'Naturopathe', 'Médecin', 'Pharmacien·ne',
+  'Kinésithérapeute', 'Ostéopathe', 'Sage-femme', 'Infirmier·ère', 'Autre profession de santé', 'Je ne suis pas professionnel·le de santé',
+];
+---
+<form
+  class={`form-inscription ${sombre ? 'sombre' : ''}`}
+  id={id}
+  data-endpoint={WEBINAIRE.endpoint}
+  data-repli={WEBINAIRE.urlRepli}
+  data-merci={u('/merci-webinaire/')}
+  data-source={source}
+  novalidate
+>
+  <div class="deux">
+    <div class="champ">
+      <label for={`${id}-prenom`}>Prénom</label>
+      <input id={`${id}-prenom`} name="prenom" autocomplete="given-name" required />
+    </div>
+    <div class="champ">
+      <label for={`${id}-email`}>Email</label>
+      <input id={`${id}-email`} name="email" type="email" autocomplete="email" inputmode="email" required />
+    </div>
+  </div>
+  <div class="champ">
+    <label for={`${id}-profession`}>Votre profession</label>
+    <select id={`${id}-profession`} name="profession" required>
+      <option value="">Choisir…</option>
+      {professions.map((p) => <option>{p}</option>)}
+    </select>
+  </div>
+  <label class="consentement">
+    <input type="checkbox" name="consentement" required />
+    <span>J’accepte de recevoir les emails liés au webinaire (lien, rappels, replay) et la newsletter de Véronique Liesse. Désinscription en un clic.</span>
+  </label>
+  <button class="btn btn-accent bouton" type="submit">Je réserve ma place gratuite</button>
+  <p class="message-formulaire" role="status" hidden></p>
+</form>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('.form-inscription').forEach(function (f) {
+      if (f.dataset.pret) return;
+      f.dataset.pret = '1';
+      var message = f.querySelector('.message-formulaire');
+      var dire = function (t) { message.textContent = t; message.hidden = false; };
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!f.checkValidity()) { dire('Merci de remplir les trois champs et de cocher la case.'); f.reportValidity(); return; }
+        var d = new FormData(f);
+        var donnees = { prenom: d.get('prenom'), email: d.get('email'), profession: d.get('profession'), consentement: true, source: f.dataset.source, page: location.pathname };
+        var params = new URLSearchParams(location.search);
+        ['utm_source', 'utm_medium', 'utm_campaign', 'source'].forEach(function (k) { if (params.get(k)) donnees[k] = params.get(k); });
+        if (f.dataset.endpoint) {
+          var b = f.querySelector('button'); b.disabled = true; b.textContent = 'Envoi…';
+          fetch(f.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(donnees) })
+            .then(function (r) { if (!r.ok) throw new Error(); location.href = f.dataset.merci + '?prenom=' + encodeURIComponent(donnees.prenom); })
+            .catch(function () { b.disabled = false; b.textContent = 'Je réserve ma place gratuite'; dire('L’inscription n’a pas abouti. Réessayez dans un instant, ou écrivez-nous depuis la page contact.'); });
+        } else if (f.dataset.repli) {
+          location.href = f.dataset.repli;
+        } else {
+          dire('Les inscriptions ouvrent dans quelques jours. Pour ne pas manquer l’ouverture, suivez Véronique sur Instagram ou LinkedIn.');
+        }
+      });
+    });
+  })();
+</script>
+<style>
+  .form-inscription { width: 100%; }
+  .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  .bouton { width: 100%; }
+  .sombre .champ label, .sombre .consentement { color: var(--chaux); }
+  .sombre .message-formulaire { color: var(--encre); }
+  @media (max-width: 560px) { .deux { grid-template-columns: 1fr; } }
+</style>

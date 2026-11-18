@@ -1,0 +1,60 @@
+name: Publier veronique-liesse-nutrition.com
+
+# Généré et déployé à chaque poussée sur main, plus un build quotidien qui
+# resynchronise le CMS Google Sheet (une modification dans le Sheet part en
+# ligne au plus tard le lendemain matin, sans toucher au code).
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    env:
+      SHEET_ID: ${{ vars.SHEET_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      # Resynchronise le contenu depuis le Google Sheet quand SHEET_ID est réglé.
+      # Sans SHEET_ID, les CSV commités font foi : le build reste possible.
+      - name: Synchroniser le CMS Google Sheet
+        if: env.SHEET_ID != ''
+        run: npm run sync
+
+      # VL_PROD=1 à la bascule DNS : domaine final et base racine.
+      # Tant que le domaine pointe vers WordPress, on publie la recette github.io.
+      - name: Construire le site (détecteur inclus)
+        env:
+          VL_PROD: ${{ vars.VL_PROD || '' }}
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deployer:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4

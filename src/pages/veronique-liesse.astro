@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, u } from '../data/site';
+import { LIVRES } from '../data/cms';
+const activites = [
+  ['Enseigner la nutrition', 'Au DU de physionutrition de l’Université de Grenoble depuis 2018, où je suis membre du comité scientifique depuis sa création (microbiote, infertilité, thyroïde, surpoids et obésité…), et au CERDEN, en Belgique, depuis 2010. En 2021, j’ai lancé mes propres formations en ligne.'],
+  ['Former et accompagner les entreprises', 'Depuis plus de dix ans : ateliers, conférences, webinaires et journées bien-être sur l’énergie, le sommeil, le stress, les horaires atypiques ou les troubles musculo-squelettiques.'],
+  ['Recevoir en consultation', 'Nutrition et micronutrition à Monaco depuis 2015 : poids, troubles digestifs, fatigue, stress, fertilité et périconception, enfants et adolescent·es.'],
+  ['Suivre des sportifs de haut niveau', 'Nutritionniste d’un club de football de première division belge depuis 2015 : un suivi collectif et individuel, toute la saison.'],
+  ['Parler nutrition à la radio', 'Dans La Grande Forme sur VivaCité (RTBF), et chaque mercredi dans Feel Good sur Radio Monaco.'],
+  ['Écrire', `${LIVRES.length} livres de nutrition, aux éditions Alpen puis Leduc.`],
+];
+---
+<Base
+  titre="Véronique Liesse, diététicienne-nutritionniste et micronutritionniste | À propos"
+  description="Diététicienne-nutritionniste et micronutritionniste à Monaco, enseignante au DU de physionutrition de Grenoble et au CERDEN, auteure et formatrice."
+  chemin="/veronique-liesse/"
+>
+  <section class="hero">
+    <div class="conteneur grille">
+      <div class="arche photo" data-anim="photo">
+        <img src={u('/img/veronique-assise.webp')} alt="Portrait de Véronique Liesse" width="365" height="570" fetchpriority="high" />
+      </div>
+      <div>
+        <p class="etiquette" data-anim="texte">Diététicienne · Nutritionniste · Micronutritionniste</p>
+        <h1 data-anim="texte">Je m’appelle Véronique Liesse</h1>
+        <p class="chapo" data-anim="texte">Diététicienne-nutritionniste, enseignante en nutrition et micronutrition, et auteure de livres de nutrition.</p>
+        <p data-anim="texte">Originaire de Bruxelles, je me suis passionnée pour la diététique et la nutrition dès le début des années 2000. Je me suis formée dans plusieurs universités et instituts, en Belgique et en France (micronutrition, physionutrition, nutrithérapie, nutrition du sport, diététique de l’enfant et de l’adolescent), et je continue de me former régulièrement.</p>
+        <div class="actions" data-anim="texte">
+          <a class="btn btn-accent" href={u('/formations/')}>Accéder aux formations</a>
+          <a class="btn btn-contour" href={u('/contact/')}>Me contacter</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-sable">
+    <div class="conteneur">
+      <h2 data-reveal>Ce que je fais</h2>
+      <div class="activites">
+        {activites.map(([t, d], i) => (
+          <div class="activite" data-reveal>
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <div><h3>{t}</h3><p>{d}</p></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur valeurs">
+      <h2 data-reveal>Mes valeurs</h2>
+      <ul data-reveal>
+        {['L’écoute', 'L’empathie', 'Le non-jugement', 'L’humour', 'L’engagement'].map((v) => <li>{v}</li>)}
+      </ul>
+      <p class="petit" data-reveal>Ambassadrice Bleu-Blanc-Cœur.</p>
+    </div>
+  </section>
+
+  <section class="section fond-mer">
+    <div class="conteneur fin">
+      <h2>Vous êtes professionnel·le de santé ?</h2>
+      <p>Plus de {SITE.inscriptions.toLocaleString('fr-FR')} inscriptions à mes formations en ligne. Elles s’achètent à l’unité, à votre rythme.</p>
+      <a class="btn btn-accent" href={u('/formations/')}>Voir les formations</a>
+    </div>
+  </section>
+</Base>
+<style>
+  .hero { padding: clamp(40px, 7vw, 96px) 0; }
+  .grille { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .photo { aspect-ratio: 3 / 4; max-width: 380px; background: var(--sable); }
+  h1 { margin-top: 16px; }
+  .activites { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; margin-top: 24px; }
+  .activite { display: grid; grid-template-columns: 52px 1fr; gap: 14px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+  .num { font-family: var(--font-titre); color: var(--ocre); font-size: 1.3rem; }
+  .activite p { margin: 0; color: var(--ink-muted); }
+  .valeurs ul { list-style: none; padding: 0; margin: 0 0 16px; display: flex; flex-wrap: wrap; gap: 12px 40px; font-family: var(--font-titre); font-size: clamp(1.4rem, 3vw, 2rem); color: var(--terre-profonde); }
+  .fin { text-align: center; max-width: 720px; }
+  @media (max-width: 900px) {
+    .grille, .activites { grid-template-columns: 1fr; }
+    .photo { max-width: 260px; }
+  }
+</style>

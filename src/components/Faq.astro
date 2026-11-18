@@ -1,0 +1,13 @@
+---
+// FAQ en accordéons natifs + son JSON-LD FAQPage (à passer au layout).
+interface Props { questions: Record<string, string>[] }
+const { questions } = Astro.props;
+---
+<div class="faq">
+  {questions.map((q) => (
+    <details>
+      <summary>{q.question}</summary>
+      <p>{q.reponse}</p>
+    </details>
+  ))}
+</div>

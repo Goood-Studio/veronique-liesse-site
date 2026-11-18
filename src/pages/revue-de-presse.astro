@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { PRESSE } from '../data/cms';
+import { u } from '../data/site';
+---
+<Base titre="Revue de presse | Véronique Liesse, nutritionniste" description="Véronique Liesse dans les médias : chroniques radio sur VivaCité (RTBF) et Radio Monaco, interviews dans la presse santé et grand public." chemin="/revue-de-presse/">
+  <section class="section">
+    <div class="conteneur grille">
+      <div>
+        <h1>Revue de presse</h1>
+        <p class="chapo">Chroniqueuse nutrition à la radio, Véronique est régulièrement interviewée par la presse santé et grand public.</p>
+        <ul class="medias">{PRESSE.map((p) => <li><span>{p.media}</span><span class="type">{p.type}</span></li>)}</ul>
+      </div>
+      <img class="visuel" src={u('/img/veronique-presse.webp')} alt="Véronique Liesse en interview" width="584" height="350" loading="lazy" />
+    </div>
+  </section>
+</Base>
+<style>
+  .grille { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+  .medias { list-style: none; padding: 0; margin: 24px 0 0; }
+  .medias li { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font-family: var(--font-titre); font-size: 1.15rem; color: var(--mer); }
+  .type { font-family: var(--font-texte); font-size: .85rem; color: var(--ink-muted); }
+  .visuel { border-radius: 200px 200px 14px 14px; aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+  @media (max-width: 900px) { .grille { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import CarteFormation from '../../components/CarteFormation.astro';
+import { FORMATIONS_PUBLIEES, type Formation } from '../../data/cms';
+import { filAriane } from '../../data/jsonld';
+import { u, euros } from '../../data/site';
+
+export function getStaticPaths() {
+  return FORMATIONS_PUBLIEES.map((f) => ({ params: { slug: f.slug }, props: { f } }));
+}
+const { f } = Astro.props as { f: Formation };
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+const proches = FORMATIONS_PUBLIEES.filter((x) => x.categorie === f.categorie && x.slug !== f.slug).slice(0, 3);
+
+// Le texte vient du site WordPress (un seul long paragraphe) : on le
+// redécoupe en paragraphes lisibles, phrase par phrase.
+const phrases = (f.texte || '').split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ«“])/);
+const paragraphes: string[] = [];
+let courant = '';
+for (const p of phrases) {
+  courant = courant ? courant + ' ' + p : p;
+  if (courant.split(' ').length > 55) { paragraphes.push(courant); courant = ''; }
+}
+if (courant) paragraphes.push(courant);
+const texte = f.texte && f.texte.split(' ').length >= 40 ? paragraphes : [];
+
+const chapitres = f.chapitres.map((c) => c.replace(/^(Chapitre|Partie|Module)\s*\d+\s*[:\-\u2013]\s*/i, ''));
+const description = (f.resume || f.texte.slice(0, 150)).slice(0, 158);
+const cours = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: f.titre,
+  description: f.resume || f.texte.slice(0, 300),
+  provider: { '@id': racine + '/#organisation' },
+  inLanguage: 'fr',
+  image: `${racine}/img/formations/${f.image}`,
+  ...(f.prix != null && { offers: { '@type': 'Offer', price: String(f.prix), priceCurrency: 'EUR', category: 'Paid', url: f.lienAchat, availability: 'https://schema.org/InStock' } }),
+  hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online' },
+};
+---
+<Base
+    titre={`${f.titre} : formation en ligne | Véronique Liesse`}
+    description={description.length >= 50 ? description : `${f.titre}, formation en ligne pour professionnel·les de santé par Véronique Liesse, diététicienne-nutritionniste.`}
+    chemin={`/formations/${f.slug}/`}
+    jsonLd={[cours, filAriane(racine, [['Accueil', '/'], ['Formations', '/formations/'], [f.titre, `/formations/${f.slug}/`]])]}
+  >
+    <div class="conteneur">
+      <nav class="ariane" aria-label="Fil d’Ariane"><a href={u('/formations/')}>Formations</a> <span aria-hidden="true">/</span> {f.categorie}</nav>
+    </div>
+    <section class="hero">
+      <div class="conteneur grille">
+        <div>
+          <span class="etiquette" data-anim="texte">{f.categorie}</span>
+          <h1 data-anim="texte">{f.titre}</h1>
+          <p class="chapo" data-anim="texte">{f.resume}</p>
+          <ul class="infos" data-anim="texte">
+            <li>En ligne, à votre rythme</li>
+            {f.duree ? <li>{f.duree.replace('h', ' h ').trim()}</li> : null}
+            {f.lecons ? <li>{f.lecons} leçons et quiz</li> : null}
+            {f.chapitres.length ? <li>{f.chapitres.length} chapitres</li> : null}
+            {f.eleves ? <li>{f.eleves} inscrit·es</li> : null}
+          </ul>
+          <div class="achat" data-anim="texte">
+            {f.prix != null && <p class="prix">{euros(f.prix)}</p>}
+            <a class="btn btn-accent" href={f.lienAchat}>Accéder à la formation</a>
+          </div>
+        </div>
+        <img class="visuel" src={u(`/img/formations/${f.image}`)} alt="" width="750" height="532" data-anim="photo" />
+      </div>
+    </section>
+
+    {(texte.length > 0 || f.chapitres.length > 0) && (
+      <section class="section fond-sable">
+        <div class="conteneur corps">
+          {texte.length > 0 && (
+            <div class="texte-long">
+              <h2>Ce que vous allez apprendre</h2>
+              {texte.map((p) => <p>{p}</p>)}
+            </div>
+          )}
+          {f.chapitres.length > 0 && (
+            <aside>
+              <h2>Le programme</h2>
+              <ol class="programme">
+                {chapitres.map((c) => <li>{c}</li>)}
+              </ol>
+            </aside>
+          )}
+        </div>
+      </section>
+    )}
+
+    {proches.length > 0 && (
+      <section class="section">
+        <div class="conteneur">
+          <h2>Dans la même thématique</h2>
+          <div class="proches">{proches.map((p) => <div><CarteFormation f={p} /></div>)}</div>
+        </div>
+      </section>
+    )}
+  </Base>
+<style>
+  .ariane { padding-top: 24px; font-size: .9rem; color: var(--ink-muted); }
+  .hero { padding: 24px 0 clamp(48px, 7vw, 88px); }
+  .grille { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  h1 { margin-top: 14px; font-size: clamp(1.9rem, 4.4vw, 3rem); }
+  .visuel { border-radius: 160px 160px 12px 12px; width: 100%; aspect-ratio: 750 / 532; object-fit: cover; }
+  .infos { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .infos li { border: 1px solid var(--line); background: var(--blanc); border-radius: 999px; padding: 6px 14px; font-size: .9rem; }
+  .achat { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .prix { font-family: var(--font-titre); font-size: 2.2rem; color: var(--terre-profonde); margin: 0; }
+  .corps { display: grid; grid-template-columns: 1.3fr .7fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .corps h2 { font-size: 1.6rem; }
+  aside { background: var(--chaux); border-radius: var(--radius); padding: 28px; }
+  .programme { margin: 0; padding-left: 1.3em; }
+  .programme li { padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .proches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .proches > div { display: flex; }
+  .proches > div > :global(*) { flex: 1; }
+  @media (max-width: 900px) {
+    .grille, .corps { grid-template-columns: 1fr; }
+    .visuel { order: -1; }
+    .proches { grid-template-columns: 1fr; }
+  }
+</style>

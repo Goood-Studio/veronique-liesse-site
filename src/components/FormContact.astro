@@ -1,0 +1,67 @@
+---
+// Formulaire de contact. Avec contact_endpoint (webhook n8n) : envoi direct.
+// Sinon : ouverture de l'email (contact_email). Sinon (recette) : message.
+import { SITE } from '../data/site';
+interface Props { type: 'pro' | 'entreprise' | 'particulier'; id: string }
+const { type, id } = Astro.props;
+const professions = ['Diététicien·ne', 'Nutritionniste', 'Médecin', 'Pharmacien·ne', 'Infirmier·ère', 'Kinésithérapeute ou ostéopathe', 'Nutrithérapeute', 'Naturopathe', 'Autre profession de santé'];
+---
+<form class="form-contact" id={id} data-type={type} data-endpoint={SITE.contactEndpoint} data-email={SITE.contactEmail} novalidate>
+  {type === 'entreprise' ? (
+    <>
+      <div class="deux">
+        <div class="champ"><label for={`${id}-entreprise`}>Entreprise</label><input id={`${id}-entreprise`} name="entreprise" autocomplete="organization" required /></div>
+        <div class="champ"><label for={`${id}-taille`}>Nombre de collaborateur·rices</label>
+          <select id={`${id}-taille`} name="taille"><option value="">Choisir…</option><option>Moins de 50</option><option>50 à 250</option><option>250 à 1 000</option><option>Plus de 1 000</option></select></div>
+      </div>
+      <div class="deux">
+        <div class="champ"><label for={`${id}-nom`}>Nom et prénom</label><input id={`${id}-nom`} name="nom" autocomplete="name" required /></div>
+        <div class="champ"><label for={`${id}-email`}>Email professionnel</label><input id={`${id}-email`} name="email" type="email" autocomplete="email" required /></div>
+      </div>
+      <div class="champ"><label for={`${id}-message`}>Votre besoin (thème, format, date, nombre de participant·es)</label><textarea id={`${id}-message`} name="message" required></textarea></div>
+    </>
+  ) : (
+    <>
+      {type === 'pro' && (
+        <div class="champ"><label for={`${id}-profession`}>Profession</label>
+          <select id={`${id}-profession`} name="profession" required><option value="">Choisir…</option>{professions.map((p) => <option>{p}</option>)}</select></div>
+      )}
+      <div class="deux">
+        <div class="champ"><label for={`${id}-nom`}>Nom et prénom</label><input id={`${id}-nom`} name="nom" autocomplete="name" required /></div>
+        <div class="champ"><label for={`${id}-email`}>Email</label><input id={`${id}-email`} name="email" type="email" autocomplete="email" required /></div>
+      </div>
+      <div class="champ"><label for={`${id}-message`}>Message</label><textarea id={`${id}-message`} name="message" required></textarea></div>
+    </>
+  )}
+  <label class="consentement"><input type="checkbox" name="consentement" required /><span>J’accepte que mes données soient utilisées pour répondre à ma demande.</span></label>
+  <button class="btn btn-accent" type="submit">Envoyer</button>
+  <p class="message-formulaire" role="status" hidden></p>
+</form>
+<script is:inline>
+  (function () {
+    document.querySelectorAll('.form-contact').forEach(function (f) {
+      if (f.dataset.pret) return; f.dataset.pret = '1';
+      var m = f.querySelector('.message-formulaire');
+      var dire = function (t) { m.textContent = t; m.hidden = false; };
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!f.checkValidity()) { dire('Merci de remplir tous les champs et de cocher la case.'); f.reportValidity(); return; }
+        var d = Object.fromEntries(new FormData(f)); d.type = f.dataset.type; d.page = location.pathname;
+        if (f.dataset.endpoint) {
+          fetch(f.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+            .then(function (r) { if (!r.ok) throw new Error(); f.reset(); dire('Merci, votre message est bien envoyé. Véronique vous répond au plus vite.'); })
+            .catch(function () { dire('L’envoi n’a pas abouti. Réessayez dans un instant.'); });
+        } else if (f.dataset.email) {
+          var corps = Object.keys(d).filter(function (k) { return k !== 'consentement'; }).map(function (k) { return k + ' : ' + d[k]; }).join('\n');
+          location.href = 'mailto:' + f.dataset.email + '?subject=' + encodeURIComponent('Contact depuis le site (' + d.type + ')') + '&body=' + encodeURIComponent(corps);
+        } else {
+          dire('Le formulaire sera branché à la mise en ligne. En attendant, écrivez à Véronique sur Instagram ou LinkedIn.');
+        }
+      });
+    });
+  })();
+</script>
+<style>
+  .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  @media (max-width: 560px) { .deux { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,63 @@
+---
+import Logo from './Logo.astro';
+import { SITE, u } from '../data/site';
+const annee = new Date().getFullYear();
+---
+<footer class="pied fond-mer">
+  <div class="conteneur grille">
+    <div>
+      <Logo clair />
+      <p class="presentation">Diététicienne-nutritionniste et micronutritionniste. Formations en ligne pour professionnel·les de santé, ateliers en entreprise, consultations à Monaco.</p>
+      <ul class="reseaux">
+        <li><a href={SITE.instagram} rel="noopener" target="_blank">Instagram</a></li>
+        <li><a href={SITE.linkedin} rel="noopener" target="_blank">LinkedIn</a></li>
+        <li><a href={SITE.facebook} rel="noopener" target="_blank">Facebook</a></li>
+        <li><a href={SITE.youtube} rel="noopener" target="_blank">YouTube</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="titre">Se former</p>
+      <ul>
+        <li><a href={u('/formation-menopause/')}>Formation ménopause</a></li>
+        <li><a href={u('/webinaire-menopause/')}>Webinaire du 10 décembre</a></li>
+        <li><a href={u('/formations/')}>Toutes les formations</a></li>
+        <li><a href={u('/formations-micronutrition/')}>Se former à la micronutrition</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="titre">Véronique</p>
+      <ul>
+        <li><a href={u('/veronique-liesse/')}>À propos</a></li>
+        <li><a href={u('/qvt-en-entreprise-renforcer-qualite-de-vie/')}>Ateliers en entreprise</a></li>
+        <li><a href={u('/consultation-nutritionniste/')}>Consultations à Monaco</a></li>
+        <li><a href={u('/mes-livres/')}>Livres</a></li>
+        <li><a href={u('/revue-de-presse/')}>Presse</a></li>
+        <li><a href={u('/contact/')}>Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="conteneur bas">
+    <p>© {annee} Véronique Liesse Nutrition</p>
+    <ul>
+      <li><a href={u('/mentions-legales/')}>Mentions légales</a></li>
+      <li><a href={u('/cgv-cgu-confidentialite/')}>CGV, CGU et confidentialité</a></li>
+      <li><a href={u('/plan-de-site/')}>Plan du site</a></li>
+    </ul>
+  </div>
+</footer>
+<style>
+  .pied { padding: 64px 0 28px; font-size: .95rem; }
+  .grille { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+  .presentation { margin: 18px 0; max-width: 40ch; color: var(--sable); }
+  .titre { font-family: var(--font-titre); font-size: 1.15rem; margin-bottom: 12px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { margin-bottom: 8px; }
+  a { text-decoration: none; }
+  a:hover { text-decoration: underline; color: var(--sable); }
+  .reseaux { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .bas { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(238,235,228,.25); font-size: .85rem; color: var(--sable); }
+  .bas p { margin: 0; }
+  .bas ul { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .bas li { margin: 0; }
+  @media (max-width: 820px) { .grille { grid-template-columns: 1fr; gap: 28px; } }
+</style>

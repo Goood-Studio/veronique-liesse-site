@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { LIVRES } from '../data/cms';
+import { u } from '../data/site';
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+const livres = LIVRES.map((l) => ({ '@context': 'https://schema.org', '@type': 'Book', name: l.titre, author: { '@id': racine + '/#veronique-liesse' }, inLanguage: 'fr', image: `${racine}/img/livres/${l.image}` }));
+---
+<Base titre="Les livres de Véronique Liesse, diététicienne-nutritionniste" description={`Les ${LIVRES.length} livres de nutrition de Véronique Liesse : hormones, immunité, énergie, microbiote, perte de poids sans régime.`} chemin="/mes-livres/" jsonLd={livres}>
+  <section class="section">
+    <div class="conteneur">
+      <h1>Mes livres</h1>
+      <p class="chapo">Auteure ou co-auteure de plusieurs livres de nutrition pour le grand public, aux éditions Alpen puis Leduc.</p>
+      <ul class="livres">
+        {LIVRES.map((l) => (
+          <li data-reveal>
+            <img src={u(`/img/livres/${l.image}`)} alt={`Couverture : ${l.titre}`} loading="lazy" width="350" height="500" />
+            <h2>{l.titre}</h2>
+            {l.resume && <p>{l.resume}</p>}
+          </li>
+        ))}
+      </ul>
+      <p class="petit">Disponibles en librairie et chez les libraires en ligne.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .livres { list-style: none; padding: 0; margin: 40px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 32px; }
+  .livres img { height: 280px; width: auto; object-fit: contain; margin: 0 auto 16px; }
+  .livres h2 { font-size: 1.15rem; text-align: center; }
+  @media (max-width: 800px) { .livres { grid-template-columns: 1fr 1fr; } .livres img { height: 200px; } }
+</style>

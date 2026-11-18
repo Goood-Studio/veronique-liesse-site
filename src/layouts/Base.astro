@@ -1,0 +1,126 @@
+---
+// Le gabarit unique : head SEO complet, JSON-LD, bandeau, header, footer.
+// Une page ne peut pas sortir sans title ni description : le layout les exige.
+import '../styles/global.css';
+import Bandeau from '../components/Bandeau.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, u } from '../data/site';
+
+interface Props {
+  titre: string;
+  description: string;
+  /** Chemin canonique SANS la base, ex. "/formations/" */
+  chemin: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+  image?: string;
+}
+const { titre, description, chemin, jsonLd = [], noindex = false, image = '/img/og.jpg' } = Astro.props;
+
+const site = (import.meta.env.SITE ?? '').replace(/\/$/, '');
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const racine = site + base;
+const canonique = racine + chemin;
+
+// L'entité Véronique : le socle du référencement (et des moteurs IA).
+const personne = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': racine + '/#veronique-liesse',
+  name: SITE.nomComplet,
+  jobTitle: SITE.metier,
+  description:
+    'Diététicienne-nutritionniste et micronutritionniste à Monaco, enseignante en nutrition (DU de physionutrition, Université Grenoble Alpes ; CERDEN), auteure et formatrice de professionnel·les de santé.',
+  url: racine + '/',
+  image: racine + '/img/veronique-portrait.webp',
+  sameAs: [SITE.instagram, SITE.linkedin, SITE.facebook, SITE.youtube],
+  knowsAbout: ['Micronutrition', 'Nutrition', 'Microbiote', 'Ménopause', 'Insulinorésistance', 'Nutrition du sport', 'Qualité de vie au travail'],
+  worksFor: { '@id': racine + '/#organisation' },
+};
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  '@id': racine + '/#organisation',
+  name: SITE.nom,
+  url: racine + '/',
+  logo: racine + '/apple-touch-icon.png',
+  founder: { '@id': racine + '/#veronique-liesse' },
+  sameAs: [SITE.instagram, SITE.linkedin, SITE.facebook, SITE.youtube],
+};
+const tous = [personne, organisation, ...jsonLd];
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonique} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#24505B" />
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={u('/favicon-32.png')} type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href={u('/apple-touch-icon.png')} />
+    <link rel="sitemap" href={u('/sitemap-index.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={SITE.nom} />
+    <meta property="og:title" content={titre} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonique} />
+    <meta property="og:image" content={racine + image} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" href={u('/fonts/youngserif-latin.woff2')} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={u('/fonts/instrumentsans-latin.woff2')} as="font" type="font/woff2" crossorigin />
+    <style set:html={`
+      @font-face { font-family:'Instrument Sans'; font-style:normal; font-weight:400 700; font-display:swap;
+        src:url('${u('/fonts/instrumentsans-latin.woff2')}') format('woff2');
+        unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+20AC,U+2212; }
+      @font-face { font-family:'Instrument Sans'; font-style:normal; font-weight:400 700; font-display:swap;
+        src:url('${u('/fonts/instrumentsans-latin-ext.woff2')}') format('woff2');
+        unicode-range:U+0100-02BA,U+1E00-1E9F,U+2020,U+20A0-20C0; }
+      @font-face { font-family:'Young Serif'; font-style:normal; font-weight:400; font-display:swap;
+        src:url('${u('/fonts/youngserif-latin.woff2')}') format('woff2');
+        unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+20AC,U+2212; }
+      @font-face { font-family:'Young Serif'; font-style:normal; font-weight:400; font-display:swap;
+        src:url('${u('/fonts/youngserif-latin-ext.woff2')}') format('woff2');
+        unicode-range:U+0100-02BA,U+1E00-1E9F,U+2020,U+20A0-20C0; }
+    `} />
+    {tous.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+  </head>
+  <body>
+    <a class="lien-evitement" href="#contenu-principal">Aller au contenu</a>
+    <Bandeau />
+    <Header />
+    <main id="contenu-principal">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- GSAP auto-hébergé (RGPD : aucun CDN). Le contenu reste visible sans JS. -->
+    <script is:inline src={u('/js/gsap.min.js')}></script>
+    <script is:inline src={u('/js/ScrollTrigger.min.js')}></script>
+    <script is:inline>
+      (function () {
+        if (!window.gsap) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.location.search.indexOf('sansanim') !== -1) return;
+        gsap.registerPlugin(ScrollTrigger);
+        var photo = document.querySelector('[data-anim="photo"]');
+        if (photo) {
+          gsap.timeline({ defaults: { ease: 'expo.out' } })
+            .from(photo, { y: 36, opacity: 0, duration: 1.1, clearProps: 'all' })
+            .from('[data-anim="texte"]', { y: 24, opacity: 0, duration: .85, stagger: .08, clearProps: 'all' }, .1);
+        }
+        document.querySelectorAll('[data-reveal]').forEach(function (el) {
+          gsap.from(el, { y: 26, opacity: 0, duration: .85, ease: 'expo.out', clearProps: 'all',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+        });
+      })();
+    </script>
+  </body>
+</html>

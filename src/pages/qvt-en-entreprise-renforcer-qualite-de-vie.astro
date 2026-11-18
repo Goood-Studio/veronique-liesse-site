@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import FormContact from '../components/FormContact.astro';
+import { u } from '../data/site';
+const themes = [
+  ['Énergie et coups de pompe', 'Comprendre les baisses d’énergie de la journée et les éviter par l’assiette.'],
+  ['Sommeil', 'Ce que l’alimentation change à la qualité du sommeil, et l’inverse.'],
+  ['Stress et santé mentale', 'Nutrition et gestion du stress, prévention de l’épuisement.'],
+  ['Horaires atypiques', 'Manger quand on travaille de nuit ou en horaires décalés.'],
+  ['Troubles musculo-squelettiques', 'Le rôle de l’alimentation dans l’inflammation et la récupération.'],
+  ['Ménopause au travail', 'Mieux vivre la périménopause et la ménopause au quotidien professionnel.'],
+  ['Maladies chroniques et prévention', 'Réduire les facteurs de risque par des choix simples.'],
+  ['Lire les étiquettes', 'Faire ses courses sans se faire piéger.'],
+];
+const formats = [
+  ['Conférence', 'Sur site ou en ligne, pour un large public, suivie de questions-réponses.'],
+  ['Atelier', 'En petit groupe, concret et participatif.'],
+  ['Webinaire en direct', 'Pour les équipes réparties sur plusieurs sites, avec replay.'],
+  ['Journée bien-être', 'Plusieurs interventions sur une journée, avec vos autres partenaires.'],
+  ['Programme sur plusieurs mois', 'Un fil rouge (énergie, sommeil…) décliné en plusieurs rendez-vous.'],
+];
+---
+<Base
+  titre="QVCT : ateliers nutrition en entreprise pour la qualité de vie au travail | Véronique Liesse"
+  description="Ateliers, conférences et webinaires nutrition pour la QVCT : énergie, sommeil, stress, horaires atypiques, ménopause au travail. Sur site ou en visio."
+  chemin="/qvt-en-entreprise-renforcer-qualite-de-vie/"
+  image="/img/qvt.webp"
+>
+  <section class="hero">
+    <div class="conteneur grille">
+      <div>
+        <p class="etiquette" data-anim="texte">Entreprises · QVCT et prévention</p>
+        <h1 data-anim="texte">Des ateliers nutrition pour la qualité de vie au travail</h1>
+        <p class="chapo" data-anim="texte">L’énergie, le sommeil et la santé de vos équipes passent aussi par l’assiette. Depuis plus de dix ans, Véronique Liesse intervient en entreprise pour rendre les collaborateur·rices acteur·rices de leur santé, sur site ou en visio.</p>
+        <div class="actions" data-anim="texte">
+          <a class="btn btn-accent" href="#demande">Parler de votre projet</a>
+        </div>
+      </div>
+      <img class="visuel" src={u('/img/qvt.webp')} alt="Atelier nutrition en entreprise" width="900" height="600" data-anim="photo" />
+    </div>
+  </section>
+
+  <section class="section fond-sable">
+    <div class="conteneur">
+      <h2 data-reveal>Les thèmes les plus demandés</h2>
+      <div class="themes">
+        {themes.map(([t, d]) => <div class="theme" data-reveal><h3>{t}</h3><p>{d}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur deux">
+      <div data-reveal>
+        <h2>Les formats</h2>
+        <p>Chaque intervention est construite avec vous : le thème, la durée et le format s’adaptent à vos équipes, à vos horaires et à votre plan de prévention.</p>
+        <p class="petit">Les contenus s’appuient sur des données scientifiques sourcées. Véronique est diététicienne-nutritionniste, coach certifiée, enseignante et auteure.</p>
+      </div>
+      <ul class="formats" data-reveal>
+        {formats.map(([t, d]) => <li><strong>{t}</strong><span>{d}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section fond-argile" id="demande">
+    <div class="conteneur deux">
+      <div data-reveal>
+        <h2>Parlons de votre projet</h2>
+        <p>Indiquez le thème, le format envisagé et le nombre de participant·es : Véronique vous répond avec une proposition adaptée.</p>
+        <ul class="liste-coche">
+          <li>Interventions en français, sur site ou en visio</li>
+          <li>Monaco, France, Belgique</li>
+          <li>Pour les RH, la médecine du travail, les comités QVCT</li>
+        </ul>
+      </div>
+      <div class="carte" data-reveal><FormContact type="entreprise" id="contact-entreprise" /></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .hero { padding: clamp(40px, 7vw, 96px) 0; }
+  .grille { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  h1 { margin-top: 16px; }
+  .visuel { border-radius: 200px 200px 14px 14px; aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+  .themes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 28px; margin-top: 16px; }
+  .theme { border-top: 2px solid var(--ocre); padding: 18px 0 24px; }
+  .theme h3 { font-size: 1.15rem; }
+  .theme p { margin: 0; font-size: .95rem; color: var(--ink-muted); }
+  .deux { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+  .formats { list-style: none; padding: 0; margin: 0; }
+  .formats li { display: grid; gap: 2px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .formats strong { font-family: var(--font-titre); font-weight: 400; color: var(--mer); font-size: 1.2rem; }
+  .carte { background: var(--chaux); border-radius: var(--radius); padding: clamp(20px, 4vw, 36px); }
+  @media (max-width: 900px) {
+    .grille, .deux { grid-template-columns: 1fr; }
+    .themes { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) { .themes { grid-template-columns: 1fr; } }
+</style>

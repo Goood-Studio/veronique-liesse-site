@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import FormInscription from '../components/FormInscription.astro';
+import Faq from '../components/Faq.astro';
+import { FAQ, TEMOIGNAGES, R } from '../data/cms';
+import { faqJsonLd } from '../data/jsonld';
+import { SITE, PHASE, WEBINAIRE, OFFRE, u } from '../data/site';
+
+const questions = FAQ('menopause');
+const chapitres = R('formation_chapitres').split('|').map((c) => c.trim()).filter(Boolean);
+const duree = R('formation_duree');
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+const achatOuvert = PHASE !== 'attente' && OFFRE.lienAchat;
+const cours = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: 'Formation ménopause pour professionnel·les de santé',
+  description: 'Formation en ligne sur la périménopause et la ménopause : nutrition, micronutrition et accompagnement des patientes, pour les professionnel·les de santé.',
+  provider: { '@id': racine + '/#organisation' },
+  inLanguage: 'fr',
+  offers: { '@type': 'Offer', price: String(OFFRE.prix), priceCurrency: 'EUR', category: 'Paid', availability: PHASE === 'attente' ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock' },
+  hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: duree || undefined },
+};
+const pourQui = [
+  'Vous recevez des femmes de 40 à 60 ans et la ménopause revient dans presque chaque consultation',
+  'Vous voulez des réponses nuancées aux questions qu’elles vous posent (soja, phytoestrogènes, poids, sommeil, compléments)',
+  'Vous cherchez des sources récentes, pas des recettes toutes faites',
+  'Vous voulez des outils concrets, directement utilisables en consultation',
+];
+---
+<Base
+  titre="Formation ménopause pour professionnel·les de santé | Véronique Liesse"
+  description="Formation en ligne sur la périménopause et la ménopause pour professionnel·les de santé : nutrition, micronutrition et accompagnement des patientes, sources à l’appui."
+  chemin="/formation-menopause/"
+  jsonLd={[cours, faqJsonLd(questions)]}
+>
+  <section class="hero">
+    <div class="conteneur grille">
+      <div>
+        <p class="etiquette" data-anim="texte">Formation en ligne · professionnel·les de santé</p>
+        <h1 data-anim="texte">Accompagner la ménopause avec la nutrition et la micronutrition</h1>
+        <p class="chapo" data-anim="texte">Une formation complète, révisée chapitre par chapitre à la lumière des études récentes, pour répondre avec justesse à vos patientes en périménopause et en ménopause.</p>
+        <ul class="infos" data-anim="texte">
+          <li>Vidéos et supports PDF</li>
+          <li>À votre rythme</li>
+          <li>Certificat de fin de formation</li>
+          {duree && <li>{duree}</li>}
+        </ul>
+        <div class="actions" data-anim="texte">
+          {PHASE === 'attente' ? (
+            <>
+              <a class="btn btn-accent" href={u('/webinaire-menopause/')}>Ouverture le {WEBINAIRE.dateLongue} : je m’inscris au webinaire</a>
+            </>
+          ) : achatOuvert ? (
+            <a class="btn btn-accent" href={OFFRE.lienAchat}>Je rejoins la formation · {PHASE === 'vente' ? `${OFFRE.prixLancement} €` : `${OFFRE.prix} €`}</a>
+          ) : (
+            <a class="btn btn-accent" href={u('/contact/')}>Une question ? Écrivez-moi</a>
+          )}
+        </div>
+      </div>
+      <div class="arche photo" data-anim="photo">
+        <img src={u('/img/veronique-portrait.webp')} alt="Véronique Liesse, formatrice" width="562" height="500" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-sable" aria-labelledby="titre-pourqui">
+    <div class="conteneur deux">
+      <div data-reveal>
+        <h2 id="titre-pourqui">Cette formation est faite pour vous si…</h2>
+        <ul class="liste-coche">{pourQui.map((p) => <li>{p}</li>)}</ul>
+      </div>
+      <div class="encart" data-reveal>
+        <h3>L’approche de Véronique</h3>
+        <p>Chaque affirmation est sourcée. Pour chaque étude, ce qu’elle montre, et ce qu’elle ne montre pas. Pas de promesse miracle : une lecture rigoureuse de la science, traduite en conseils applicables.</p>
+        <p class="petit">Véronique enseigne au DU de physionutrition de l’Université de Grenoble depuis 2018 et forme des professionnel·les de santé depuis 2010.</p>
+      </div>
+    </div>
+  </section>
+
+  {chapitres.length > 0 && (
+    <section class="section" aria-labelledby="titre-programme">
+      <div class="conteneur etroit">
+        <h2 id="titre-programme">Le programme</h2>
+        <ol class="programme">
+          {chapitres.map((c, i) => <li data-reveal><span class="n">{String(i + 1).padStart(2, '0')}</span><span>{c}</span></li>)}
+        </ol>
+      </div>
+    </section>
+  )}
+
+  {TEMOIGNAGES.length > 0 && (
+    <section class="section fond-argile" aria-labelledby="titre-temoignages">
+      <div class="conteneur">
+        <h2 id="titre-temoignages">Ce qu’en disent les professionnel·les formé·es</h2>
+        <div class="temoignages">
+          {TEMOIGNAGES.map((t) => (
+            <figure data-reveal>
+              <blockquote>« {t.texte} »</blockquote>
+              <figcaption><strong>{t.prenom}</strong>{t.metier && `, ${t.metier}`}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section fond-mer" aria-labelledby="titre-offre" id="offre">
+    <div class="conteneur offre">
+      <div data-reveal>
+        <h2 id="titre-offre">{PHASE === 'attente' ? 'Découvrez-la au webinaire du ' + WEBINAIRE.dateLongue : 'Rejoindre la formation'}</h2>
+        {PHASE === 'attente' ? (
+          <p>La formation ouvre à la fin du webinaire gratuit. Les participant·es bénéficient d’une offre de lancement pendant 48 heures : <strong>{OFFRE.prixLancement} € au lieu de {OFFRE.prix} € TTC</strong>.</p>
+        ) : PHASE === 'vente' ? (
+          <p>Offre de lancement jusqu’au samedi 12 décembre à minuit : <strong>{OFFRE.prixLancement} € au lieu de {OFFRE.prix} € TTC</strong>{OFFRE.code ? <> avec le code <strong class="code">{OFFRE.code}</strong></> : ''}.</p>
+        ) : (
+          <p>La formation complète : <strong>{OFFRE.prix} € TTC</strong>.</p>
+        )}
+        {PHASE !== 'attente' && OFFRE.lienAchat && <a class="btn btn-accent" href={OFFRE.lienAchat}>Je rejoins la formation</a>}
+      </div>
+      {PHASE === 'attente' && (
+        <div class="carte-form" data-reveal>
+          <p class="titre-form">Webinaire gratuit</p>
+          <p class="petit centre">{WEBINAIRE.dateLongue} · {WEBINAIRE.dureeMin} min · replay inclus</p>
+          <FormInscription id="inscription-formation" source="page-formation" />
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="titre-faq">
+    <div class="conteneur etroit">
+      <h2 id="titre-faq">Questions fréquentes</h2>
+      <Faq questions={questions} />
+      <p class="petit fin">Une autre question ? <a href={u('/contact/')}>Écrivez à Véronique</a>.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .hero { padding: clamp(40px, 7vw, 96px) 0; }
+  .grille { display: grid; grid-template-columns: 1.3fr .7fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+  h1 { margin-top: 16px; }
+  .photo { aspect-ratio: 4 / 5; max-width: 400px; justify-self: end; width: 100%; background: var(--sable); }
+  .infos { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .infos li { border: 1px solid var(--line); background: var(--blanc); border-radius: 999px; padding: 6px 14px; font-size: .92rem; }
+  .deux { display: grid; grid-template-columns: 1.2fr .8fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .encart { background: var(--chaux); border-radius: 160px 160px 14px 14px; padding: 64px 32px 32px; }
+  .etroit { max-width: 820px; }
+  .programme { list-style: none; padding: 0; margin: 0; }
+  .programme li { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 1.1rem; }
+  .n { font-family: var(--font-titre); color: var(--ocre); font-size: 1.3rem; }
+  .temoignages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  figure { margin: 0; background: var(--chaux); border-radius: var(--radius); padding: 28px; }
+  blockquote { margin: 0 0 14px; font-size: 1.05rem; }
+  .offre { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .code { background: var(--chaux); color: var(--mer); padding: 2px 10px; border-radius: 6px; }
+  .carte-form { background: var(--chaux); color: var(--encre); border-radius: 220px 220px 16px 16px; padding: 72px clamp(22px, 4vw, 40px) 32px; }
+  .titre-form { font-family: var(--font-titre); font-size: 1.6rem; color: var(--mer); text-align: center; margin-bottom: 4px; }
+  .centre { text-align: center; margin-bottom: 22px; }
+  .fin { margin-top: 24px; }
+  @media (max-width: 900px) {
+    .grille, .deux, .offre { grid-template-columns: 1fr; }
+    .photo { order: -1; justify-self: center; max-width: 280px; }
+  }
+  @media (max-width: 600px) { .carte-form { border-radius: 160px 160px 14px 14px; padding-top: 56px; } }
+</style>

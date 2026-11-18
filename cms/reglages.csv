@@ -1,0 +1,24 @@
+cle,valeur,note
+phase,attente,"attente = avant le 10/12 (tout mène au webinaire) ; vente = page de vente ouverte ; fermee = après le 12/12 minuit"
+webinaire_date,2026-12-10,Date du webinaire (AAAA-MM-JJ)
+webinaire_heure,,"Heure de début, ex. 19:00 (vide = « heure communiquée à l'inscription »)"
+webinaire_titre,"Soja et ménopause : ce que les professionnel·les de santé doivent savoir","Sujet à confirmer (piste soja retenue avec Anne-Charlotte le 13/11)"
+webinaire_duree_min,50,Durée annoncée en minutes
+inscription_endpoint,,"URL du webhook (n8n) qui reçoit prénom, email, profession et inscrit dans ActiveCampaign + Zoom. Vide = bouton vers inscription_url"
+inscription_url,,"Lien d'inscription Zoom (repli si pas de webhook). Vide = le formulaire affiche un message d'attente"
+formation_prix_ttc,249,Prix public de la formation ménopause en euros TTC
+formation_prix_lancement_ttc,175,Prix avec le code de lancement (30 %)
+formation_code_lancement,,Code de lancement à afficher après le webinaire (vide = non affiché)
+formation_fin_offre,2026-12-12T23:59,Fin de l'offre de lancement
+formation_lien_achat,,"Lien de paiement de la formation ménopause (WordPress actuel ou LearnyBox). Vide = bouton vers le webinaire"
+contact_endpoint,,"URL du webhook (n8n) du formulaire de contact. Vide = ouverture de l'email"
+contact_email,veronique@liesse-nutrition.com,Adresse email de contact (repli du formulaire)
+instagram,https://www.instagram.com/veroniqueliessenutrition/,
+linkedin,https://www.linkedin.com/in/v%C3%A9ronique-liesse-6a7a114/,
+facebook,https://www.facebook.com/veroniqueliesse.nutrition/,
+youtube,https://www.youtube.com/channel/UCIszMBfjLN6GT-_sCwctEyg,
+consultations_lieu,Thermes Marins Monte-Carlo,"À VALIDER : les consultations aux Thermes s'arrêtent-elles ?"
+consultations_adresse,"2 avenue de Monte-Carlo (entrée par l'avenue d'Ostende), Monaco",
+consultations_tel,+377 98 06 69 00,
+formation_chapitres,,"Titres des 6 chapitres de la formation ménopause, séparés par | (vide = section masquée). À FOURNIR par Véronique"
+formation_duree,,"Durée totale de la formation, ex. « 8 heures de vidéo » (vide = non affichée)"

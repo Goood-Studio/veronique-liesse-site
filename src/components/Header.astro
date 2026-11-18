@@ -1,0 +1,71 @@
+---
+import Logo from './Logo.astro';
+import { PHASE, u } from '../data/site';
+const chemin = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const liens = [
+  { href: '/formations/', label: 'Formations' },
+  { href: '/formation-menopause/', label: 'Ménopause' },
+  { href: '/qvt-en-entreprise-renforcer-qualite-de-vie/', label: 'Entreprises' },
+  { href: '/veronique-liesse/', label: 'À propos' },
+  { href: '/contact/', label: 'Contact' },
+];
+const cta = PHASE === 'attente'
+  ? { href: '/webinaire-menopause/', label: 'Webinaire gratuit' }
+  : { href: '/formation-menopause/', label: 'La formation ménopause' };
+---
+<header class="entete">
+  <div class="conteneur barre">
+    <a href={u('/')} class="lien-logo" aria-label="Véronique Liesse Nutrition, accueil"><Logo /></a>
+    <nav aria-label="Navigation principale">
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="visually-hidden">Ouvrir le menu</span>
+        <span class="traits" aria-hidden="true"></span>
+      </button>
+      <ul id="menu-principal" class="menu">
+        {liens.map((l) => (
+          <li><a href={u(l.href)} aria-current={chemin.startsWith(l.href) ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+        <li class="li-cta"><a class="btn btn-accent" href={u(cta.href)}>{cta.label}</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<script is:inline>
+  (function () {
+    var b = document.querySelector('.burger');
+    var m = document.getElementById('menu-principal');
+    if (!b || !m) return;
+    b.addEventListener('click', function () {
+      var ouvert = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', String(!ouvert));
+      m.classList.toggle('ouvert', !ouvert);
+      document.body.classList.toggle('menu-ouvert', !ouvert);
+    });
+  })();
+</script>
+<style>
+  .entete { background: var(--chaux); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+  .barre { display: flex; align-items: center; justify-content: space-between; min-height: 76px; gap: 20px; }
+  .lien-logo { text-decoration: none; }
+  .menu { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 26px; }
+  .menu a:not(.btn) { color: var(--encre); text-decoration: none; font-weight: 500; white-space: nowrap; padding: 6px 0; border-bottom: 2px solid transparent; }
+  .menu a:not(.btn):hover, .menu a[aria-current='page'] { border-bottom-color: var(--ocre); color: var(--mer); }
+  .btn { min-height: 46px; padding: 10px 20px; white-space: nowrap; }
+  .burger { display: none; width: 48px; height: 48px; border: 0; background: transparent; cursor: pointer; position: relative; }
+  .traits, .traits::before, .traits::after { position: absolute; left: 12px; width: 24px; height: 2px; background: var(--mer); content: ''; transition: transform .2s; }
+  .traits { top: 23px; }
+  .traits::before { left: 0; top: -7px; }
+  .traits::after { left: 0; top: 7px; }
+  .burger[aria-expanded='true'] .traits { background: transparent; }
+  .burger[aria-expanded='true'] .traits::before { transform: translateY(7px) rotate(45deg); }
+  .burger[aria-expanded='true'] .traits::after { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 1040px) {
+    .burger { display: block; }
+    .menu { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--chaux); flex-direction: column; align-items: stretch; gap: 0; padding: 8px var(--gouttiere) 24px; border-bottom: 1px solid var(--line); }
+    .menu.ouvert { display: flex; }
+    .menu li { border-bottom: 1px solid var(--line); }
+    .menu a:not(.btn) { display: block; padding: 16px 0; font-size: 1.1rem; border: 0; }
+    .li-cta { border: 0 !important; padding-top: 16px; }
+    .li-cta .btn { width: 100%; }
+  }
+</style>

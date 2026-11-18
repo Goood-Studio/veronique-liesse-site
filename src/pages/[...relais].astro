@@ -1,0 +1,24 @@
+---
+// Les anciennes URLs WordPress sans page équivalente : page relais
+// (noindex + redirection immédiate + canonique vers la nouvelle page).
+import redirections from '../data/redirections.json';
+import { u } from '../data/site';
+export function getStaticPaths() {
+  return Object.entries(redirections as Record<string, string>).map(([de, vers]) => ({
+    params: { relais: de.replace(/^\/|\/$/g, '') },
+    props: { vers },
+  }));
+}
+const { vers } = Astro.props as { vers: string };
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Page déplacée · Véronique Liesse Nutrition</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={racine + vers} />
+    <meta http-equiv="refresh" content={`0; url=${u(vers)}`} />
+  </head>
+  <body><p>Cette page a déménagé : <a href={u(vers)}>continuer</a>.</p></body>
+</html>

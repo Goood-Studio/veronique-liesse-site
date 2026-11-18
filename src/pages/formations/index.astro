@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+import CarteFormation from '../../components/CarteFormation.astro';
+import Faq from '../../components/Faq.astro';
+import { FORMATIONS_PUBLIEES, FAQ } from '../../data/cms';
+import { faqJsonLd } from '../../data/jsonld';
+import { SITE, PHASE, WEBINAIRE, u } from '../../data/site';
+
+const categories = [...new Set(FORMATIONS_PUBLIEES.map((f) => f.categorie))];
+const questions = FAQ('formations');
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+const liste = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: FORMATIONS_PUBLIEES.map((f, i) => ({ '@type': 'ListItem', position: i + 1, url: `${racine}/formations/${f.slug}/`, name: f.titre })),
+};
+---
+<Base
+  titre="Formations en ligne en nutrition et micronutrition | Véronique Liesse"
+  description={`${FORMATIONS_PUBLIEES.length} formations en ligne pour professionnel·les de santé : microbiote, insulinorésistance, thyroïde, santé féminine, nutrition du sport. À l’unité, à votre rythme.`}
+  chemin="/formations/"
+  jsonLd={[liste, faqJsonLd(questions)]}
+>
+  <section class="section serree">
+    <div class="conteneur">
+      <h1 data-anim="texte">Les formations en ligne</h1>
+      <p class="chapo" data-anim="texte">Des formations pointues, abordables et pratiques pour les professionnel·les de santé. Chaque formation s’achète seule : vous choisissez uniquement ce dont vous avez besoin. Plus de {SITE.inscriptions.toLocaleString('fr-FR')} inscriptions à ce jour.</p>
+      <nav class="filtres" aria-label="Catégories">
+        {categories.map((c) => <a href={`#${c.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]+/g, '-')}`}>{c}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="conteneur nouvelle" aria-label="Nouvelle formation">
+    <a class="bloc-meno" href={u(PHASE === 'attente' ? '/webinaire-menopause/' : '/formation-menopause/')}>
+      <span class="etiquette">Nouveau</span>
+      <span class="t">Formation ménopause</span>
+      <span class="s">{PHASE === 'attente' ? `Ouverture le ${WEBINAIRE.dateLongue}, après le webinaire gratuit` : 'Ouverte : découvrez le programme'}</span>
+      <span class="fleche" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  {categories.map((c) => (
+    <section class="section serree" id={c.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]+/g, '-')}>
+      <div class="conteneur">
+        <h2>{c}</h2>
+        <div class="grille">
+          {FORMATIONS_PUBLIEES.filter((f) => f.categorie === c).map((f) => <div data-reveal><CarteFormation f={f} /></div>)}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section fond-sable">
+    <div class="conteneur etroit">
+      <h2>Questions fréquentes</h2>
+      <Faq questions={questions} />
+    </div>
+  </section>
+</Base>
+<style>
+  .filtres { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .filtres a { border: 1px solid var(--mer); border-radius: 999px; padding: 8px 16px; text-decoration: none; font-weight: 500; }
+  .filtres a:hover { background: var(--mer); color: var(--chaux); }
+  .bloc-meno { display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: 'e t f' 'e s f'; gap: 2px 20px; align-items: center; background: var(--mer); color: var(--chaux); border-radius: 18px; padding: 26px 30px; text-decoration: none; }
+  .bloc-meno .etiquette { grid-area: e; background: var(--terre-cuite); color: var(--blanc); }
+  .t { grid-area: t; font-family: var(--font-titre); font-size: 1.5rem; }
+  .s { grid-area: s; color: var(--sable); }
+  .fleche { grid-area: f; font-size: 1.6rem; transition: transform .25s; }
+  .bloc-meno:hover { color: var(--chaux); }
+  .bloc-meno:hover .fleche { transform: translateX(6px); }
+  .grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .grille > div { display: flex; }
+  .grille > div > :global(*) { flex: 1; }
+  .etroit { max-width: 820px; }
+  @media (max-width: 900px) { .grille { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) {
+    .grille { grid-template-columns: 1fr; }
+    .bloc-meno { grid-template-columns: 1fr auto; grid-template-areas: 'e f' 't f' 's f'; padding: 22px; }
+    .bloc-meno .etiquette { justify-self: start; margin-bottom: 8px; }
+  }
+</style>
