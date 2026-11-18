@@ -39,7 +39,7 @@ const cours = {
 };
 ---
 <Base
-    titre={`${f.titre} : formation en ligne | Véronique Liesse`}
+    titre={`${f.titre}, formation en ligne | Véronique Liesse`}
     description={description.length >= 50 ? description : `${f.titre}, formation en ligne pour professionnel·les de santé par Véronique Liesse, diététicienne-nutritionniste.`}
     chemin={`/formations/${f.slug}/`}
     jsonLd={[cours, filAriane(racine, [['Accueil', '/'], ['Formations', '/formations/'], [f.titre, `/formations/${f.slug}/`]])]}
