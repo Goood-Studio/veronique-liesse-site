@@ -91,6 +91,7 @@ const formats = [
   .formats li { display: grid; gap: 2px; padding: 16px 0; border-bottom: 1px solid var(--line); }
   .formats strong { font-family: var(--font-titre); font-weight: 400; color: var(--mer); font-size: 1.2rem; }
   .carte { background: var(--chaux); border-radius: var(--radius); padding: clamp(20px, 4vw, 36px); }
+  @media (max-width: 600px) { .visuel { border-radius: 140px 140px 12px 12px; } }
   @media (max-width: 900px) {
     .grille, .deux { grid-template-columns: 1fr; }
     .themes { grid-template-columns: 1fr 1fr; }

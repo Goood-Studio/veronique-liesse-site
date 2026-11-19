@@ -49,7 +49,8 @@ const pourQui = [
         <div class="actions" data-anim="texte">
           {PHASE === 'attente' ? (
             <>
-              <a class="btn btn-accent" href={u('/webinaire-menopause/')}>Ouverture le {WEBINAIRE.dateLongue} : je m’inscris au webinaire</a>
+              <a class="btn btn-accent" href={u('/webinaire-menopause/')}>Je m’inscris au webinaire du {WEBINAIRE.dateCourte}</a>
+              <p class="petit ouverture">Ouverture de la formation le {WEBINAIRE.dateLongue}, à la fin du webinaire.</p>
             </>
           ) : achatOuvert ? (
             <a class="btn btn-accent" href={OFFRE.lienAchat}>Je rejoins la formation · {PHASE === 'vente' ? `${OFFRE.prixLancement} €` : `${OFFRE.prix} €`}</a>
@@ -158,9 +159,14 @@ const pourQui = [
   .titre-form { font-family: var(--font-titre); font-size: 1.6rem; color: var(--mer); text-align: center; margin-bottom: 4px; }
   .centre { text-align: center; margin-bottom: 22px; }
   .fin { margin-top: 24px; }
+  .ouverture { margin: 0; align-self: center; }
   @media (max-width: 900px) {
     .grille, .deux, .offre { grid-template-columns: 1fr; }
     .photo { order: -1; justify-self: center; max-width: 280px; }
   }
-  @media (max-width: 600px) { .carte-form { border-radius: 160px 160px 14px 14px; padding-top: 56px; } }
+  @media (max-width: 600px) {
+    .carte-form { border-radius: 160px 160px 14px 14px; padding: 56px 18px 24px; }
+    .encart { border-radius: 120px 120px 14px 14px; padding: 52px 22px 26px; }
+    .ouverture { align-self: auto; text-align: center; }
+  }
 </style>

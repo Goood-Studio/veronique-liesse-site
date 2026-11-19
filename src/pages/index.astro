@@ -195,13 +195,15 @@ const metiers = ['Diététicien·nes', 'Nutritionnistes', 'Nutrithérapeutes', '
   @media (max-width: 900px) {
     .hero-grille, .meno-grille, .deux-colonnes, .apropos { grid-template-columns: 1fr; }
     .hero-photo { order: -1; justify-self: center; max-width: 300px; }
+    .preuves { margin-top: 28px; }
     .grille-formations { grid-template-columns: 1fr 1fr; }
-    .photo-apropos { max-width: 280px; }
+    .photo-apropos { max-width: 280px; width: 100%; justify-self: center; }
   }
   @media (max-width: 600px) {
     .preuves { grid-template-columns: 1fr; gap: 14px; }
     .grille-formations { grid-template-columns: 1fr; }
     .rangee { grid-template-columns: 40px 1fr 24px; gap: 12px; }
-    .carte-form { border-radius: 160px 160px 14px 14px; padding-top: 56px; }
+    .entete-section .btn { width: 100%; }
+    .carte-form { border-radius: 160px 160px 14px 14px; padding: 56px 18px 24px; }
   }
 </style>

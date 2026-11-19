@@ -19,5 +19,12 @@ const { clair = false } = Astro.props;
   .nom { font-family: var(--font-titre); font-size: 1.2rem; color: var(--mer); }
   .sous { font-size: .64rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--olivier-profond); margin-top: 3px; }
   .clair .nom { color: var(--chaux); }
+  @media (max-width: 400px) {
+    .logo { gap: 8px; }
+    .disque { width: 36px; height: 36px; }
+    .disque svg { width: 22px; height: 22px; }
+    .nom { font-size: 1.05rem; }
+    .sous { font-size: .56rem; letter-spacing: .12em; }
+  }
   .clair .sous { color: var(--sable); }
 </style>

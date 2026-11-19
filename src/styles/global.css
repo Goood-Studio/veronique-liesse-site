@@ -125,6 +125,21 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .lien-evitement { position: absolute; left: -9999px; top: 8px; z-index: 100; background: var(--mer); color: var(--chaux); padding: 10px 16px; border-radius: 8px; }
 .lien-evitement:focus { left: 8px; }
 
-.texte-long { max-width: 72ch; }
+.texte-long { max-width: 72ch; overflow-wrap: anywhere; }
 .texte-long h2 { margin-top: 1.6em; font-size: 1.6rem; }
 .texte-long h3 { margin-top: 1.4em; }
+
+/* Mobile : alignements et largeurs homogènes */
+p, li, td, h1, h2, h3, a { overflow-wrap: break-word; }
+.btn { text-align: center; }
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .section { padding: 48px 0; }
+  .section.serree { padding: 32px 0; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .actions .btn { width: 100%; }
+  .etiquette { border-radius: 12px; line-height: 1.35; }
+  .chapo { font-size: 1.02rem; }
+}
+
+form[id], section[id] { scroll-margin-top: 96px; }

@@ -75,6 +75,10 @@ const liste = {
   .etroit { max-width: 820px; }
   @media (max-width: 900px) { .grille { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 600px) {
+    .filtres { flex-wrap: nowrap; overflow-x: auto; margin: 8px calc(-1 * var(--gouttiere)) 0; padding: 0 var(--gouttiere) 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .filtres::-webkit-scrollbar { display: none; }
+    .filtres a { white-space: nowrap; padding: 7px 14px; font-size: .92rem; }
+    .t { font-size: 1.3rem; line-height: 1.2; }
     .grille { grid-template-columns: 1fr; }
     .bloc-meno { grid-template-columns: 1fr auto; grid-template-areas: 'e f' 't f' 's f'; padding: 22px; }
     .bloc-meno .etiquette { justify-self: start; margin-bottom: 8px; }

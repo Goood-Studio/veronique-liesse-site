@@ -9,7 +9,8 @@ const fermee = PHASE === 'fermee';
     <div class="conteneur interieur">
       {PHASE === 'attente' ? (
         <p>
-          <strong>Webinaire gratuit le {WEBINAIRE.dateLongue}</strong>
+          <strong class="masquer-mobile">Webinaire gratuit le {WEBINAIRE.dateLongue}</strong>
+          <strong class="seulement-mobile">Webinaire gratuit · {WEBINAIRE.dateCourte}</strong>
           <span class="masquer-mobile"> · pour les professionnel·les de santé</span>
         </p>
       ) : (
@@ -31,5 +32,10 @@ const fermee = PHASE === 'fermee';
   p { margin: 0; }
   a { color: var(--chaux); font-weight: 600; text-decoration: underline; text-decoration-color: var(--ocre); text-decoration-thickness: 2px; white-space: nowrap; }
   a:hover { color: var(--sable); }
-  @media (max-width: 640px) { .masquer-mobile { display: none; } }
+  .seulement-mobile { display: none; }
+  @media (max-width: 640px) {
+    .masquer-mobile { display: none; }
+    .seulement-mobile { display: inline; }
+    .interieur { flex-wrap: nowrap; gap: 12px; min-height: 40px; font-size: .88rem; }
+  }
 </style>

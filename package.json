@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/verifier.mjs",
+    "build": "astro build && node scripts/typographie.mjs && node scripts/verifier.mjs",
     "preview": "astro preview",
     "sync": "node scripts/sync-sheet.mjs"
   },
