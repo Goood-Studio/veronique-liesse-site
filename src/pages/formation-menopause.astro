@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import FormInscription from '../components/FormInscription.astro';
 import Faq from '../components/Faq.astro';
-import { FAQ, TEMOIGNAGES, R } from '../data/cms';
+import { FAQ, TEMOIGNAGES as TOUS_TEMOIGNAGES, R } from '../data/cms';
+const TEMOIGNAGES = TOUS_TEMOIGNAGES.filter((t) => t.formation !== 'newsletter');
 import { faqJsonLd } from '../data/jsonld';
 import { SITE, PHASE, WEBINAIRE, OFFRE, u } from '../data/site';
 
@@ -22,10 +23,10 @@ const cours = {
   hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: duree || undefined },
 };
 const pourQui = [
-  'Vous recevez des femmes de 40 à 60 ans et la ménopause revient dans presque chaque consultation',
-  'Vous voulez des réponses nuancées aux questions qu’elles vous posent (soja, phytoestrogènes, poids, sommeil, compléments)',
-  'Vous cherchez des sources récentes, pas des recettes toutes faites',
-  'Vous voulez des outils concrets, directement utilisables en consultation',
+  'Tu reçois des femmes de 40 à 60 ans et la ménopause revient dans presque chaque consultation',
+  'Tu veux des réponses nuancées aux questions qu’elles te posent (soja, phytoestrogènes, poids, sommeil, compléments)',
+  'Tu cherches des sources récentes, pas des recettes toutes faites',
+  'Tu veux des outils concrets, directement utilisables en consultation',
 ];
 ---
 <Base
@@ -39,23 +40,23 @@ const pourQui = [
       <div>
         <p class="etiquette" data-anim="texte">Formation en ligne · professionnel·les de santé</p>
         <h1 data-anim="texte">Accompagner la ménopause avec la nutrition et la micronutrition</h1>
-        <p class="chapo" data-anim="texte">Une formation complète, révisée chapitre par chapitre à la lumière des études récentes, pour répondre avec justesse à vos patientes en périménopause et en ménopause.</p>
+        <p class="chapo" data-anim="texte">Une formation complète, révisée chapitre par chapitre à la lumière des études récentes, pour répondre avec justesse à tes patientes en périménopause et en ménopause.</p>
         <ul class="infos" data-anim="texte">
           <li>Vidéos et supports PDF</li>
-          <li>À votre rythme</li>
+          <li>À ton rythme</li>
           <li>Certificat de fin de formation</li>
           {duree && <li>{duree}</li>}
         </ul>
         <div class="actions" data-anim="texte">
           {PHASE === 'attente' ? (
             <>
-              <a class="btn btn-accent" href={u('/webinaire-menopause/')}>Je m’inscris au webinaire du {WEBINAIRE.dateCourte}</a>
+              <a class="btn btn-accent" href={u('/webinaire-soja-menopause/')}>Je m’inscris au webinaire du {WEBINAIRE.dateCourte}</a>
               <p class="petit ouverture">Ouverture de la formation le {WEBINAIRE.dateLongue}, à la fin du webinaire.</p>
             </>
           ) : achatOuvert ? (
             <a class="btn btn-accent" href={OFFRE.lienAchat}>Je rejoins la formation · {PHASE === 'vente' ? `${OFFRE.prixLancement} €` : `${OFFRE.prix} €`}</a>
           ) : (
-            <a class="btn btn-accent" href={u('/contact/')}>Une question ? Écrivez-moi</a>
+            <a class="btn btn-accent" href={u('/contact/')}>Une question ? Écris-moi</a>
           )}
         </div>
       </div>
@@ -68,7 +69,7 @@ const pourQui = [
   <section class="section fond-sable" aria-labelledby="titre-pourqui">
     <div class="conteneur deux">
       <div data-reveal>
-        <h2 id="titre-pourqui">Cette formation est faite pour vous si…</h2>
+        <h2 id="titre-pourqui">Cette formation est faite pour toi si…</h2>
         <ul class="liste-coche">{pourQui.map((p) => <li>{p}</li>)}</ul>
       </div>
       <div class="encart" data-reveal>
@@ -109,7 +110,7 @@ const pourQui = [
   <section class="section fond-mer" aria-labelledby="titre-offre" id="offre">
     <div class="conteneur offre">
       <div data-reveal>
-        <h2 id="titre-offre">{PHASE === 'attente' ? 'Découvrez-la au webinaire du ' + WEBINAIRE.dateLongue : 'Rejoindre la formation'}</h2>
+        <h2 id="titre-offre">{PHASE === 'attente' ? 'Découvre-la au webinaire du ' + WEBINAIRE.dateLongue : 'Rejoindre la formation'}</h2>
         {PHASE === 'attente' ? (
           <p>La formation ouvre à la fin du webinaire gratuit. Les participant·es bénéficient d’une offre de lancement pendant 48 heures : <strong>{OFFRE.prixLancement} € au lieu de {OFFRE.prix} € TTC</strong>.</p>
         ) : PHASE === 'vente' ? (
@@ -133,7 +134,7 @@ const pourQui = [
     <div class="conteneur etroit">
       <h2 id="titre-faq">Questions fréquentes</h2>
       <Faq questions={questions} />
-      <p class="petit fin">Une autre question ? <a href={u('/contact/')}>Écrivez à Véronique</a>.</p>
+      <p class="petit fin">Une autre question ? <a href={u('/contact/')}>Écris à Véronique</a>.</p>
     </div>
   </section>
 </Base>

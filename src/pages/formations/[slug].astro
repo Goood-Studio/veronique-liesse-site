@@ -54,7 +54,7 @@ const cours = {
           <h1 data-anim="texte">{f.titre}</h1>
           <p class="chapo" data-anim="texte">{f.resume}</p>
           <ul class="infos" data-anim="texte">
-            <li>En ligne, à votre rythme</li>
+            <li>En ligne, à ton rythme</li>
             {f.duree ? <li>{f.duree.replace('h', ' h ').trim()}</li> : null}
             {f.lecons ? <li>{f.lecons} leçons et quiz</li> : null}
             {f.chapitres.length ? <li>{f.chapitres.length} chapitres</li> : null}
@@ -74,7 +74,7 @@ const cours = {
         <div class="conteneur corps">
           {texte.length > 0 && (
             <div class="texte-long">
-              <h2>Ce que vous allez apprendre</h2>
+              <h2>Ce que tu vas apprendre</h2>
               {texte.map((p) => <p>{p}</p>)}
             </div>
           )}

@@ -13,17 +13,17 @@ const google = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
   + '&dates=' + debut + '00/' + fin + '&ctz=Europe/Monaco'
   + '&details=' + encodeURIComponent('Le lien de connexion est dans l’email de confirmation.');
 ---
-<Base titre="Votre place est réservée | Véronique Liesse" description="Votre inscription au webinaire gratuit de Véronique Liesse est confirmée. Ajoutez-le à votre agenda et suivez-la en attendant." chemin="/merci-webinaire/" noindex>
+<Base titre="Ta place est réservée | Véronique Liesse" description="Ton inscription au webinaire gratuit de Véronique Liesse est confirmée. Ajoute-le à ton agenda et suis-la en attendant." chemin="/merci-webinaire/" noindex>
   <section class="section">
     <div class="conteneur etroit">
-      <h1>Merci<span id="prenom"></span>, votre place est réservée</h1>
-      <p class="chapo">Vous allez recevoir un email de confirmation avec le lien de connexion. Pensez à vérifier vos courriers indésirables, et à ajouter l’adresse de Véronique à vos contacts.</p>
+      <h1>Merci<span id="prenom"></span>, ta place est réservée</h1>
+      <p class="chapo">Tu vas recevoir un email de confirmation avec le lien de connexion. Pense à vérifier tes courriers indésirables, et à ajouter l’adresse de Véronique à tes contacts.</p>
       <ol class="etapes">
-        <li><strong>Ajoutez le webinaire à votre agenda</strong> : {WEBINAIRE.dateLongue}{WEBINAIRE.heureTexte ? ` à ${WEBINAIRE.heureTexte}` : ''}, {WEBINAIRE.dureeMin} minutes.
+        <li><strong>Ajoute le webinaire à ton agenda</strong> : {WEBINAIRE.dateLongue}{WEBINAIRE.heureTexte ? ` à ${WEBINAIRE.heureTexte}` : ''}, {WEBINAIRE.dureeMin} minutes.
           {WEBINAIRE.heure && <div class="actions"><a class="btn btn-mer" href={google} target="_blank" rel="noopener">Google Agenda</a></div>}
         </li>
         <li><strong>Le jour J</strong>, la salle ouvre 30 minutes avant : le lien direct est dans l’email de rappel.</li>
-        <li><strong>En attendant</strong>, suivez Véronique sur <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a> et <a href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>.</li>
+        <li><strong>En attendant</strong>, suis Véronique sur <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a> et <a href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>.</li>
       </ol>
       <a href={u('/formations/')}>Découvrir les autres formations →</a>
     </div>

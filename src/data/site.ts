@@ -34,6 +34,8 @@ export const PHASE = (R('phase') || 'attente') as 'attente' | 'vente' | 'fermee'
 
 export const WEBINAIRE = {
   titre: R('webinaire_titre'),
+  sousTitre: R('webinaire_sous_titre'),
+  replayH: Number(R('webinaire_replay_h') || 48),
   date: R('webinaire_date'),
   heure,
   dureeMin: Number(R('webinaire_duree_min') || 50),

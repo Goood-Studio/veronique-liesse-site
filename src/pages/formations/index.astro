@@ -17,14 +17,14 @@ const liste = {
 ---
 <Base
   titre="Formations en ligne en nutrition et micronutrition | Véronique Liesse"
-  description={`${FORMATIONS_PUBLIEES.length} formations en ligne pour professionnel·les de santé : microbiote, insulinorésistance, thyroïde, santé féminine, nutrition du sport. À l’unité, à votre rythme.`}
+  description={`${FORMATIONS_PUBLIEES.length} formations en ligne pour professionnel·les de santé : microbiote, insulinorésistance, thyroïde, santé féminine, nutrition du sport. À l’unité, à ton rythme.`}
   chemin="/formations/"
   jsonLd={[liste, faqJsonLd(questions)]}
 >
   <section class="section serree">
     <div class="conteneur">
       <h1 data-anim="texte">Les formations en ligne</h1>
-      <p class="chapo" data-anim="texte">Des formations pointues, abordables et pratiques pour les professionnel·les de santé. Chaque formation s’achète seule : vous choisissez uniquement ce dont vous avez besoin. Plus de {SITE.inscriptions.toLocaleString('fr-FR')} inscriptions à ce jour.</p>
+      <p class="chapo" data-anim="texte">Des formations pointues, abordables et pratiques pour les professionnel·les de santé. Chaque formation s’achète seule : tu choisis uniquement ce dont tu as besoin. Plus de {SITE.inscriptions.toLocaleString('fr-FR')} inscriptions à ce jour.</p>
       <nav class="filtres" aria-label="Catégories">
         {categories.map((c) => <a href={`#${c.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]+/g, '-')}`}>{c}</a>)}
       </nav>
@@ -32,10 +32,10 @@ const liste = {
   </section>
 
   <section class="conteneur nouvelle" aria-label="Nouvelle formation">
-    <a class="bloc-meno" href={u(PHASE === 'attente' ? '/webinaire-menopause/' : '/formation-menopause/')}>
+    <a class="bloc-meno" href={u(PHASE === 'attente' ? '/webinaire-soja-menopause/' : '/formation-menopause/')}>
       <span class="etiquette">Nouveau</span>
       <span class="t">Formation ménopause</span>
-      <span class="s">{PHASE === 'attente' ? `Ouverture le ${WEBINAIRE.dateLongue}, après le webinaire gratuit` : 'Ouverte : découvrez le programme'}</span>
+      <span class="s">{PHASE === 'attente' ? `Ouverture le ${WEBINAIRE.dateLongue}, après le webinaire gratuit` : 'Ouverte : découvre le programme'}</span>
       <span class="fleche" aria-hidden="true">→</span>
     </a>
   </section>

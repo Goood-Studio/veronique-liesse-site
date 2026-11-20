@@ -1,0 +1,231 @@
+---
+// Page d'inscription au webinaire gratuit du 10/12 : « Le procès du soja ».
+// Le titre, la date, l'heure et la durée du replay viennent du Sheet (onglet
+// « reglages ») ; les accusations et le déroulé vivent ici.
+import Base from '../layouts/Base.astro';
+import FormInscription from '../components/FormInscription.astro';
+import Faq from '../components/Faq.astro';
+import { FAQ, TEMOIGNAGES } from '../data/cms';
+import { faqJsonLd } from '../data/jsonld';
+import { SITE, WEBINAIRE, u } from '../data/site';
+
+const questions = FAQ('webinaire');
+const lectrices = TEMOIGNAGES.filter((t) => t.formation === 'newsletter');
+const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
+const debut = WEBINAIRE.heure ? `${WEBINAIRE.date}T${WEBINAIRE.heure}:00+01:00` : WEBINAIRE.date;
+const [titreCourt, titreSuite] = WEBINAIRE.titre.split(/\s*:\s*/);
+
+// Les dix accusations (liste de travail, à valider par Véronique). Le verdict
+// n'est jamais donné ici : il est réservé au webinaire.
+const accusations = [
+  { texte: 'Le soja est un perturbateur endocrinien', meno: false },
+  { texte: 'Le soja augmente le risque de cancer du sein', meno: true },
+  { texte: 'Après un cancer du sein, le soja est interdit', meno: true },
+  { texte: 'Le soja calme les bouffées de chaleur', meno: true },
+  { texte: 'Le soja dérègle la thyroïde', meno: false },
+  { texte: 'Le soja féminise les hommes', meno: false },
+  { texte: 'Le soja est à éviter chez les enfants', meno: false },
+  { texte: 'Le soja est mauvais pour le microbiote', meno: true },
+  { texte: 'Une gélule d’isoflavones vaut le soja de l’assiette', meno: true },
+  { texte: 'Le soja, c’est forcément OGM et déforestation', meno: false },
+];
+
+const deroule = [
+  ['Le cadre', 'Ce qu’on va voir, combien de temps, et ce qui t’attend à la fin. Pas de surprise.'],
+  ['Les accusations, une à une', 'Pour chacune : ce qu’on entend, ce que disent les études, et le verdict. Rapide pour les plus simples, en profondeur pour celles qui touchent à la ménopause.'],
+  ['Le dossier ménopause', 'Bouffées de chaleur, cancer du sein, microbiote : ce que tu peux conseiller, à qui, et ce qu’il vaut mieux éviter.'],
+  ['Tes questions', 'Envoie ta question sur le soja en t’inscrivant : Véronique répond aux plus fréquentes en direct.'],
+  ['Pour aller plus loin', 'Véronique présente sa nouvelle formation complète sur la ménopause, avec une offre réservée aux participant·es pendant 48 heures.'],
+];
+
+const evenement = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: WEBINAIRE.titre,
+  description: `Webinaire gratuit pour les professionnel·les de santé : dix idées reçues sur le soja passées au crible des études, avec un focus sur la ménopause. Animé par Véronique Liesse, diététicienne-nutritionniste et micronutritionniste.`,
+  startDate: debut,
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: { '@type': 'VirtualLocation', url: racine + '/webinaire-soja-menopause/' },
+  isAccessibleForFree: true,
+  inLanguage: 'fr',
+  about: ['Soja', 'Isoflavones', 'Ménopause', 'Nutrition'],
+  organizer: { '@id': racine + '/#veronique-liesse' },
+  performer: { '@id': racine + '/#veronique-liesse' },
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: racine + '/webinaire-soja-menopause/' },
+  audience: { '@type': 'Audience', audienceType: 'Professionnel·les de santé' },
+};
+---
+<Base
+  titre={`Le procès du soja : webinaire gratuit pour les pros de santé, ${WEBINAIRE.dateLongue} | Véronique Liesse`}
+  description={`Webinaire gratuit le ${WEBINAIRE.dateLongue} : 10 idées reçues sur le soja passées au crible des études, et ce que ça change à la ménopause. Replay ${WEBINAIRE.replayH} h.`}
+  chemin="/webinaire-soja-menopause/"
+  jsonLd={[evenement, faqJsonLd(questions)]}
+>
+  <section class="hero-webinaire">
+    <div class="conteneur grille">
+      <div>
+        <p class="etiquette" data-anim="texte">Webinaire gratuit · pour les professionnel·les de santé</p>
+        <h1 data-anim="texte">{titreCourt}{titreSuite && <span class="suite">{titreSuite}</span>}</h1>
+        <p class="sous-titre" data-anim="texte">{WEBINAIRE.sousTitre}</p>
+        <p class="quand" data-anim="texte">
+          <span>{WEBINAIRE.dateLongue}</span>
+          <span>{WEBINAIRE.heureTexte || 'heure communiquée à l’inscription'}</span>
+          <span>{WEBINAIRE.dureeMin} min, en ligne</span>
+          <span>replay {WEBINAIRE.replayH} h</span>
+        </p>
+        <a class="btn btn-accent saut-form" href="#inscription-webinaire">Je réserve ma place gratuite</a>
+        <p class="chapo" data-anim="texte">Perturbateur endocrinien pour les un·es, allié de la ménopause pour les autres : le soja divise, et tes patientes te demandent quoi en penser. Pendant ce webinaire, Véronique ouvre le dossier et fait comparaître dix accusations devant les preuves. Pour chacune, un verdict clair : confirmé, nuancé ou rejeté.</p>
+        <ul class="liste-coche" data-anim="texte">
+          <li>Des réponses sourcées à donner en consultation, dès le lendemain</li>
+          <li>Pour qui le soja est intéressant, et pour qui il vaut mieux s’abstenir</li>
+          <li>Le point précis sur la ménopause : bouffées de chaleur, cancer du sein, microbiote</li>
+        </ul>
+      </div>
+      <div class="carte-form" data-anim="photo">
+        <p class="titre-form">Je réserve ma place</p>
+        <p class="petit centre">Gratuit · replay disponible {WEBINAIRE.replayH} h pour les inscrit·es</p>
+        <FormInscription id="inscription-webinaire" source="page-webinaire" question />
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-sable" aria-labelledby="titre-dossier">
+    <div class="conteneur">
+      <div class="entete" data-reveal>
+        <p class="etiquette">Le dossier</p>
+        <h2 id="titre-dossier">Dix accusations à la barre</h2>
+        <p>Ce que tu entends en consultation, sur les réseaux ou dans la presse. Le verdict tombe le {WEBINAIRE.dateLongue}.</p>
+      </div>
+      <ol class="accusations">
+        {accusations.map((a, i) => (
+          <li data-reveal class={a.meno ? 'meno' : ''}>
+            <span class="num">Pièce n° {String(i + 1).padStart(2, '0')}</span>
+            <span class="texte">« {a.texte} »</span>
+            <span class="verdict">{a.meno ? 'Focus ménopause · verdict le ' + WEBINAIRE.dateCourte : 'Verdict le ' + WEBINAIRE.dateCourte}</span>
+          </li>
+        ))}
+      </ol>
+      <div class="verdicts" data-reveal>
+        <p><span class="pastille confirme">Confirmé</span>ce que les études soutiennent</p>
+        <p><span class="pastille nuance">Nuancé</span>vrai dans certains cas, à certaines doses</p>
+        <p><span class="pastille rejete">Rejeté</span>ce que les preuves ne confirment pas</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="titre-deroule">
+    <div class="conteneur deux-col">
+      <div data-reveal>
+        <h2 id="titre-deroule">Comment se passe le webinaire</h2>
+        <p>{WEBINAIRE.dureeMin} minutes en direct sur Zoom, avec un replay disponible {WEBINAIRE.replayH} heures pour toutes les personnes inscrites, même absentes. Le contenu est technique et sourcé : il est pensé pour les diététicien·nes, nutritionnistes, médecins, pharmacien·nes, naturopathes, sages-femmes et autres professionnel·les de santé.</p>
+        <a class="btn btn-accent" href="#inscription-webinaire">Je réserve ma place</a>
+      </div>
+      <ol class="deroule">
+        {deroule.map(([titre, texte], i) => (
+          <li data-reveal><span class="n">{i + 1}</span><div><strong>{titre}</strong><p>{texte}</p></div></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section fond-sable" aria-labelledby="titre-anime">
+    <div class="conteneur anime">
+      <div class="arche photo" data-reveal>
+        <img src={u('/img/veronique-assise.webp')} alt="Véronique Liesse" width="365" height="570" loading="lazy" />
+      </div>
+      <div data-reveal>
+        <h2 id="titre-anime">Animé par Véronique Liesse</h2>
+        <p>Diététicienne-nutritionniste et micronutritionniste, Véronique enseigne la nutrition aux professionnel·les de santé depuis 2010, notamment au DU de physionutrition de l’Université de Grenoble. Autrice de 7 livres, chroniqueuse radio, ses formations en ligne comptent plus de {SITE.inscriptions.toLocaleString('fr-FR')} inscriptions.</p>
+        <p>Sa méthode : partir des études, garder la nuance, et toujours finir par ce que tu peux faire concrètement avec tes patientes. Avec une bonne dose d’humour, de l’avis de ses lectrices.</p>
+        <a class="lien" href={u('/formation-menopause/')}>Découvrir la formation ménopause →</a>
+      </div>
+    </div>
+  </section>
+
+  {lectrices.length > 0 && (
+    <section class="section" aria-labelledby="titre-lectrices">
+      <div class="conteneur">
+        <h2 id="titre-lectrices" class="centre-titre">Ce qu’en disent ses lectrices</h2>
+        <div class="temoignages">
+          {lectrices.map((t) => (
+            <figure data-reveal>
+              <blockquote>« {t.texte} »</blockquote>
+              <figcaption><strong>{t.prenom}</strong>{t.metier && !t.prenom.includes("lectrice") && `, ${t.metier.toLowerCase()}`}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section fond-sable" aria-labelledby="titre-faq">
+    <div class="conteneur etroit">
+      <h2 id="titre-faq">Questions fréquentes</h2>
+      <Faq questions={questions} />
+      <div class="actions fin"><a class="btn btn-accent" href="#inscription-webinaire">Je réserve ma place gratuite</a></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .hero-webinaire { padding: clamp(40px, 7vw, 88px) 0; }
+  .grille { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+  h1 { margin-top: 16px; }
+  h1 .suite { display: block; font-size: .58em; line-height: 1.15; color: var(--terre-cuite); margin-top: 10px; }
+  .sous-titre { font-size: 1.15rem; color: var(--mer); font-weight: 600; margin: 0 0 18px; max-width: 36ch; }
+  .quand { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+  .quand span { background: var(--mer); color: var(--chaux); padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: .92rem; }
+  .quand span:first-child { background: var(--terre-cuite); }
+  .quand span:last-child { background: var(--olivier); }
+  .carte-form { background: var(--blanc); border: 1px solid var(--line); border-radius: 220px 220px 16px 16px; padding: 72px clamp(22px, 4vw, 40px) 32px; position: sticky; top: 100px; }
+  .titre-form { font-family: var(--font-titre); font-size: 1.6rem; color: var(--mer); text-align: center; margin-bottom: 4px; }
+  .centre { text-align: center; margin-bottom: 22px; }
+  .saut-form { display: none; }
+
+  .entete { max-width: 640px; margin-bottom: 32px; }
+  .accusations { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; counter-reset: none; }
+  .accusations li { background: var(--blanc); border: 1px solid var(--line); border-left: 4px solid var(--mer); border-radius: 6px 16px 16px 6px; padding: 16px 20px; display: grid; gap: 6px; }
+  .accusations li.meno { border-left-color: var(--terre-cuite); }
+  .num { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--olivier-profond); }
+  .accusations .texte { font-family: var(--font-titre); font-size: 1.15rem; color: var(--mer); line-height: 1.3; }
+  .verdict { font-size: .82rem; color: var(--terre-cuite); font-weight: 600; }
+  .accusations li:not(.meno) .verdict { color: var(--olivier-profond); }
+  .verdicts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 28px; }
+  .verdicts p { margin: 0; display: flex; align-items: center; gap: 10px; font-size: .95rem; }
+  .pastille { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 999px; color: var(--blanc); }
+  .confirme { background: var(--olivier); }
+  .nuance { background: var(--ocre); color: var(--encre); }
+  .rejete { background: var(--terre-cuite); }
+
+  .deux-col { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 6vw, 72px); align-items: start; }
+  .deroule { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+  .deroule li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
+  .deroule .n { width: 44px; height: 44px; border-radius: 50%; background: var(--mer); color: var(--chaux); display: grid; place-items: center; font-family: var(--font-titre); font-size: 1.2rem; }
+  .deroule li:last-child .n { background: var(--terre-cuite); }
+  .deroule p { margin: 4px 0 0; }
+
+  .anime { display: grid; grid-template-columns: .5fr 1.5fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .photo { aspect-ratio: 3 / 4; max-width: 260px; }
+  .lien { font-weight: 600; }
+  .centre-titre { text-align: center; margin-bottom: 32px; }
+  .temoignages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .temoignages figure { margin: 0; background: var(--blanc); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
+  .temoignages blockquote { margin: 0; font-size: 1.02rem; line-height: 1.55; }
+  .temoignages figcaption { font-size: .9rem; color: var(--olivier-profond); }
+  .etroit { max-width: 820px; }
+  .fin { margin-top: 32px; }
+
+  @media (max-width: 900px) {
+    .grille, .anime, .deux-col { grid-template-columns: 1fr; }
+    .carte-form { position: static; scroll-margin-top: 90px; }
+    .saut-form { display: flex; width: 100%; margin: 0 0 24px; }
+    .photo { max-width: 220px; width: 100%; justify-self: center; }
+    .accusations, .temoignages { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .carte-form { border-radius: 160px 160px 14px 14px; padding: 56px 18px 24px; }
+    .quand { gap: 6px; }
+    .quand span { font-size: .85rem; padding: 5px 12px; }
+    .accusations .texte { font-size: 1.05rem; }
+  }
+</style>

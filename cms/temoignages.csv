@@ -1,4 +1,5 @@
 publie,ordre,prenom,metier,texte,formation
-non,1,[À FOURNIR],Diététicienne,"[À FOURNIR : un des 4 témoignages écrits du post des 10 000, avec l'accord de la personne]",
-non,2,[À FOURNIR],,"[À FOURNIR]",
-non,3,[À FOURNIR],,"[À FOURNIR]",
+oui,1,Laurence,Lectrice de la newsletter,"J’engloutis vos infos passionnantes, piquées d’une pointe d’humour. Ouf, on dramatise beaucoup moins et surtout, on se sent moins seule.",newsletter
+oui,2,Christine,Lectrice de la newsletter,"Merci pour ces courriels pleins d’esprit et de bonne humeur. J’ai hâte de découvrir le webinaire sur la ménopause.",newsletter
+oui,3,Une autre lectrice,Lectrice de la newsletter,"Je passe un vrai bon moment à les lire, et je gagne en plus des références bibliographiques si je veux approfondir le sujet.",newsletter
+non,4,[À FOURNIR],Diététicienne,"[À FOURNIR : un témoignage d’une professionnelle formée, avec son accord]",menopause

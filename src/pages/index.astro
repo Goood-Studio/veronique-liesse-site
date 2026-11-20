@@ -23,7 +23,7 @@ const metiers = ['Diététicien·nes', 'Nutritionnistes', 'Nutrithérapeutes', '
         <p class="chapo" data-anim="texte">Des formations en ligne précises, sourcées et directement applicables en consultation, pour les professionnel·les de santé qui veulent aller plus loin que les bases.</p>
         <div class="actions" data-anim="texte">
           <a class="btn btn-accent" href={u('/formations/')}>Voir les formations</a>
-          <a class="btn btn-contour" href={u(PHASE === 'attente' ? '/webinaire-menopause/' : '/formation-menopause/')}>
+          <a class="btn btn-contour" href={u(PHASE === 'attente' ? '/webinaire-soja-menopause/' : '/formation-menopause/')}>
             {PHASE === 'attente' ? `Webinaire gratuit du ${WEBINAIRE.dateCourte}` : 'La formation ménopause'}
           </a>
         </div>
@@ -44,7 +44,7 @@ const metiers = ['Diététicien·nes', 'Nutritionnistes', 'Nutrithérapeutes', '
       <div data-reveal>
         <span class="etiquette">Nouveau · décembre 2026</span>
         <h2 id="titre-menopause">La ménopause, au-delà des idées reçues</h2>
-        <p>Périménopause, ménopause : vos patientes vous posent des questions de plus en plus précises. Véronique lance sa formation complète pour vous donner des réponses nuancées et sourcées, et des outils concrets pour les accompagner.</p>
+        <p>Périménopause, ménopause : tes patientes te posent des questions de plus en plus précises. Véronique lance sa formation complète pour te donner des réponses nuancées et sourcées, et des outils concrets pour les accompagner.</p>
         {PHASE === 'attente' ? (
           <>
             <p><strong>Pour la découvrir, rendez-vous au webinaire gratuit du {WEBINAIRE.dateLongue}{WEBINAIRE.heureTexte ? ` à ${WEBINAIRE.heureTexte}` : ''}</strong> : « {WEBINAIRE.titre} ».</p>
@@ -58,7 +58,7 @@ const metiers = ['Diététicien·nes', 'Nutritionnistes', 'Nutrithérapeutes', '
       </div>
       {PHASE === 'attente' && (
         <div class="carte-form" data-reveal>
-          <p class="titre-form">Réservez votre place</p>
+          <p class="titre-form">Réserve ta place</p>
           <p class="petit">Gratuit · {WEBINAIRE.dureeMin} minutes · replay envoyé à toutes les personnes inscrites</p>
           <FormInscription id="inscription-accueil" source="accueil" />
         </div>
@@ -71,7 +71,7 @@ const metiers = ['Diététicien·nes', 'Nutritionnistes', 'Nutrithérapeutes', '
       <div class="entete-section" data-reveal>
         <div>
           <h2 id="titre-formations">Les formations en ligne</h2>
-          <p class="chapo">Chaque formation s’achète seule, à un prix accessible. Vous choisissez ce dont vous avez besoin, et vous avancez à votre rythme.</p>
+          <p class="chapo">Chaque formation s’achète seule, à un prix accessible. Tu choisis ce dont tu as besoin, et tu avances à ton rythme.</p>
         </div>
         <a class="btn btn-contour" href={u('/formations/')}>Les {FORMATIONS_PUBLIEES.length} formations</a>
       </div>

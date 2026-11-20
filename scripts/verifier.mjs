@@ -33,7 +33,7 @@ for (const chemin of pages) {
   if (desc && desc[1].length > 175) erreurs.push(`${nom} : meta description trop longue (${desc[1].length}).`);
   if (!html.includes('rel="canonical"')) erreurs.push(`${nom} : canonique absent.`);
   if (!html.includes('application/ld+json')) erreurs.push(`${nom} : aucun JSON-LD.`);
-  if (!/webinaire-menopause\/|formation-menopause\//.test(html)) erreurs.push(`${nom} : aucun lien vers le webinaire ou la formation ménopause.`);
+  if (!/webinaire-soja-menopause\/|formation-menopause\//.test(html)) erreurs.push(`${nom} : aucun lien vers le webinaire ou la formation ménopause.`);
   if (prod && /veronique-liesse-nutrition\.com\/formations\/[a-z]/.test(html))
     erreurs.push(`${nom} : lien d'achat vers l'ancien WordPress (boucle après la bascule). Mettre les liens LearnyBox dans le Sheet.`);
 }
