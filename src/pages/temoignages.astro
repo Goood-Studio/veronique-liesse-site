@@ -1,0 +1,104 @@
+---
+// Mur de témoignages : tous les témoignages publiés, ou donnés avec accord,
+// de l'onglet « temoignages » du Sheet. Filtres par public.
+import Base from '../layouts/Base.astro';
+import { TEMOIGNAGES_TOUS } from '../data/cms';
+import { PHASE, WEBINAIRE, u } from '../data/site';
+
+const categorie = (f: string) =>
+  ['newsletter', 'livre'].includes(f) ? 'lecteurs' : f === 'consultation' ? 'patients' : f === 'entreprise' ? 'entreprises' : 'pros';
+const mur = TEMOIGNAGES_TOUS
+  .filter((t) => (t.publie === 'oui' || t.accord === 'oui') && t.texte && !/vid[ée]o à transcrire|\[À FOURNIR/i.test(t.texte))
+  .map((t) => ({ ...t, cat: categorie(t.formation ?? '') }));
+const filtres = [
+  ['tous', 'Tous', mur.length],
+  ['pros', 'Professionnel·les formé·es', mur.filter((t) => t.cat === 'pros').length],
+  ['lecteurs', 'Lectrices et lecteurs', mur.filter((t) => t.cat === 'lecteurs').length],
+  ['patients', 'Patient·es', mur.filter((t) => t.cat === 'patients').length],
+  ['entreprises', 'Entreprises', mur.filter((t) => t.cat === 'entreprises').length],
+].filter(([, , n]) => (n as number) > 0);
+---
+<Base
+  titre="Témoignages : ce qu’en disent les pros formé·es, lectrices et patient·es | Véronique Liesse"
+  description={`${mur.length} témoignages de professionnel·les de santé formé·es, de lectrices et de patient·es de Véronique Liesse, diététicienne-nutritionniste et micronutritionniste.`}
+  chemin="/temoignages/"
+>
+  <section class="section serree">
+    <div class="conteneur">
+      <p class="etiquette" data-anim="texte">Témoignages</p>
+      <h1 data-anim="texte">Ce qu’ils et elles en disent</h1>
+      <p class="chapo" data-anim="texte">Des diététicien·nes, médecins, pharmacien·nes, naturopathes et coachs formé·es, des lectrices de la newsletter et des patient·es. Leurs mots, tels qu’ils et elles les ont écrits.</p>
+      <div class="filtres" role="group" aria-label="Filtrer les témoignages">
+        {filtres.map(([cle, label, n], i) => (
+          <button type="button" class={`filtre ${i === 0 ? 'actif' : ''}`} data-filtre={cle} aria-pressed={i === 0 ? 'true' : 'false'}>{label} <span>{n}</span></button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section mur-section" aria-label="Le mur de témoignages">
+    <div class="conteneur">
+      <div class="mur">
+        {mur.map((t) => (
+          <figure data-cat={t.cat}>
+            <blockquote>« {t.texte} »</blockquote>
+            <figcaption><strong>{t.prenom}</strong>{t.metier && <span>{t.metier}</span>}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section fond-mer">
+    <div class="conteneur fin">
+      <h2>Et si tu étais la prochaine ?</h2>
+      {PHASE === 'attente' ? (
+        <>
+          <p>Découvre la nouvelle formation ménopause au webinaire gratuit du {WEBINAIRE.dateLongue} : « {WEBINAIRE.titre} ».</p>
+          <a class="btn btn-accent" href={u('/webinaire-soja-menopause/')}>Je réserve ma place gratuite</a>
+        </>
+      ) : (
+        <>
+          <p>La formation complète sur la ménopause, pour les professionnel·les de santé.</p>
+          <a class="btn btn-accent" href={u('/formation-menopause/')}>Découvrir la formation</a>
+        </>
+      )}
+      <p class="petit"><a href={u('/formations/')}>Voir toutes les formations</a></p>
+    </div>
+  </section>
+</Base>
+<script is:inline>
+  (function () {
+    var boutons = document.querySelectorAll('.filtre');
+    var cartes = document.querySelectorAll('.mur figure');
+    boutons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var f = b.dataset.filtre;
+        boutons.forEach(function (x) { x.classList.toggle('actif', x === b); x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        cartes.forEach(function (c) { c.hidden = f !== 'tous' && c.dataset.cat !== f; });
+      });
+    });
+  })();
+</script>
+<style>
+  h1 { margin-top: 14px; }
+  .filtres { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .filtre { font: inherit; font-weight: 600; font-size: .92rem; border: 1px solid var(--mer); background: transparent; color: var(--mer); border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+  .filtre span { opacity: .6; font-weight: 500; margin-left: 4px; }
+  .filtre.actif { background: var(--mer); color: var(--chaux); }
+  .mur-section { padding-top: 0; }
+  .mur { columns: 3 300px; column-gap: 20px; }
+  .mur figure { break-inside: avoid; margin: 0 0 20px; background: var(--blanc); border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; }
+  .mur figure[hidden] { display: none; }
+  .mur figure:nth-child(4n+1) { border-top: 4px solid var(--terre-cuite); }
+  .mur figure:nth-child(4n+3) { border-top: 4px solid var(--olivier); }
+  blockquote { margin: 0 0 14px; font-size: 1rem; line-height: 1.55; }
+  figcaption { font-size: .88rem; color: var(--olivier-profond); display: grid; gap: 2px; }
+  figcaption strong { color: var(--mer); }
+  .fin { text-align: center; max-width: 720px; }
+  .fin .petit a { color: var(--chaux); }
+  @media (max-width: 600px) {
+    .filtres { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding: 0 16px 6px; }
+    .filtre { flex: none; }
+  }
+</style>

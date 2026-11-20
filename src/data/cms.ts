@@ -78,6 +78,7 @@ export const R = (cle: string) => reglages[cle] ?? '';
 export const FAQ = (page: string) =>
   lireCsv('faq').filter((q) => q.page === page && q.question && q.reponse);
 
+export const TEMOIGNAGES_TOUS = lireCsv('temoignages').sort(parOrdre);
 export const TEMOIGNAGES = lireCsv('temoignages')
   .filter((t) => oui(t.publie) && t.texte && !t.texte.includes('[À FOURNIR'))
   .sort(parOrdre);

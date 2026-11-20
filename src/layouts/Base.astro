@@ -91,6 +91,8 @@ const tous = [personne, organisation, ...jsonLd];
         unicode-range:U+0100-02BA,U+1E00-1E9F,U+2020,U+20A0-20C0; }
     `} />
     {tous.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+    <script is:inline>if (/[?&]maquette/.test(location.search)) document.documentElement.classList.add('maquette');</script>
+    <style is:inline>html.maquette .bandeau, html.maquette .entete, html.maquette footer.pied, html.maquette .lien-evitement { display: none !important; }</style>
   </head>
   <body>
     <a class="lien-evitement" href="#contenu-principal">Aller au contenu</a>
