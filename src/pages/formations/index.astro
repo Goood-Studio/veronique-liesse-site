@@ -1,4 +1,5 @@
 ---
+import Temoignages from '../../components/Temoignages.astro';
 import Base from '../../layouts/Base.astro';
 import CarteFormation from '../../components/CarteFormation.astro';
 import Faq from '../../components/Faq.astro';
@@ -50,6 +51,8 @@ const liste = {
       </div>
     </section>
   ))}
+
+  <Temoignages page="formations" titre="Ce qu’en disent les élèves" />
 
   <section class="section fond-sable">
     <div class="conteneur etroit">

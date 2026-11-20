@@ -1,4 +1,5 @@
 ---
+import Temoignages from '../components/Temoignages.astro';
 import Base from '../layouts/Base.astro';
 import { SITE, u } from '../data/site';
 const motifs = [
@@ -46,6 +47,7 @@ const lieu = {
       <p class="petit">Tu es professionnel·le de santé ? <a href={u('/formations/')}>Découvre les formations en ligne</a>.</p>
     </div>
   </section>
+  <Temoignages page="consultation" titre="Ce qu’en disent les patient·es" fond="fond-sable" />
 </Base>
 <style>
   .hero { padding: clamp(40px, 7vw, 96px) 0; }

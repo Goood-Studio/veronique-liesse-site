@@ -5,12 +5,12 @@
 import Base from '../layouts/Base.astro';
 import FormInscription from '../components/FormInscription.astro';
 import Faq from '../components/Faq.astro';
-import { FAQ, TEMOIGNAGES } from '../data/cms';
+import { FAQ } from '../data/cms';
+import Temoignages from '../components/Temoignages.astro';
 import { faqJsonLd } from '../data/jsonld';
 import { SITE, WEBINAIRE, u } from '../data/site';
 
 const questions = FAQ('webinaire');
-const lectrices = TEMOIGNAGES.filter((t) => t.formation === 'newsletter');
 const racine = (import.meta.env.SITE ?? '').replace(/\/$/, '') + import.meta.env.BASE_URL.replace(/\/$/, '');
 const debut = WEBINAIRE.heure ? `${WEBINAIRE.date}T${WEBINAIRE.heure}:00+01:00` : WEBINAIRE.date;
 const [titreCourt, titreSuite] = WEBINAIRE.titre.split(/\s*:\s*/);
@@ -143,21 +143,7 @@ const evenement = {
     </div>
   </section>
 
-  {lectrices.length > 0 && (
-    <section class="section" aria-labelledby="titre-lectrices">
-      <div class="conteneur">
-        <h2 id="titre-lectrices" class="centre-titre">Ce qu’en disent ses lectrices</h2>
-        <div class="temoignages">
-          {lectrices.map((t) => (
-            <figure data-reveal>
-              <blockquote>« {t.texte} »</blockquote>
-              <figcaption><strong>{t.prenom}</strong>{t.metier && !t.prenom.includes("lectrice") && `, ${t.metier.toLowerCase()}`}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+  <Temoignages page="webinaire" titre="Ce qu’en disent ses élèves et ses lectrices" />
 
   <section class="section fond-sable" aria-labelledby="titre-faq">
     <div class="conteneur etroit">
@@ -207,11 +193,6 @@ const evenement = {
   .anime { display: grid; grid-template-columns: .5fr 1.5fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
   .photo { aspect-ratio: 3 / 4; max-width: 260px; }
   .lien { font-weight: 600; }
-  .centre-titre { text-align: center; margin-bottom: 32px; }
-  .temoignages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .temoignages figure { margin: 0; background: var(--blanc); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
-  .temoignages blockquote { margin: 0; font-size: 1.02rem; line-height: 1.55; }
-  .temoignages figcaption { font-size: .9rem; color: var(--olivier-profond); }
   .etroit { max-width: 820px; }
   .fin { margin-top: 32px; }
 
@@ -220,7 +201,7 @@ const evenement = {
     .carte-form { position: static; scroll-margin-top: 90px; }
     .saut-form { display: flex; width: 100%; margin: 0 0 24px; }
     .photo { max-width: 220px; width: 100%; justify-self: center; }
-    .accusations, .temoignages { grid-template-columns: 1fr; }
+    .accusations { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .carte-form { border-radius: 160px 160px 14px 14px; padding: 56px 18px 24px; }

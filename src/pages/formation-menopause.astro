@@ -2,8 +2,8 @@
 import Base from '../layouts/Base.astro';
 import FormInscription from '../components/FormInscription.astro';
 import Faq from '../components/Faq.astro';
-import { FAQ, TEMOIGNAGES as TOUS_TEMOIGNAGES, R } from '../data/cms';
-const TEMOIGNAGES = TOUS_TEMOIGNAGES.filter((t) => t.formation !== 'newsletter');
+import { FAQ, R } from '../data/cms';
+import Temoignages from '../components/Temoignages.astro';
 import { faqJsonLd } from '../data/jsonld';
 import { SITE, PHASE, WEBINAIRE, OFFRE, u } from '../data/site';
 
@@ -91,21 +91,7 @@ const pourQui = [
     </section>
   )}
 
-  {TEMOIGNAGES.length > 0 && (
-    <section class="section fond-argile" aria-labelledby="titre-temoignages">
-      <div class="conteneur">
-        <h2 id="titre-temoignages">Ce qu’en disent les professionnel·les formé·es</h2>
-        <div class="temoignages">
-          {TEMOIGNAGES.map((t) => (
-            <figure data-reveal>
-              <blockquote>« {t.texte} »</blockquote>
-              <figcaption><strong>{t.prenom}</strong>{t.metier && `, ${t.metier}`}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+  <Temoignages page="menopause" titre="Ce qu’en disent les professionnel·les formé·es" fond="fond-argile" />
 
   <section class="section fond-mer" aria-labelledby="titre-offre" id="offre">
     <div class="conteneur offre">
@@ -151,9 +137,6 @@ const pourQui = [
   .programme { list-style: none; padding: 0; margin: 0; }
   .programme li { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 1.1rem; }
   .n { font-family: var(--font-titre); color: var(--ocre); font-size: 1.3rem; }
-  .temoignages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
-  figure { margin: 0; background: var(--chaux); border-radius: var(--radius); padding: 28px; }
-  blockquote { margin: 0 0 14px; font-size: 1.05rem; }
   .offre { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
   .code { background: var(--chaux); color: var(--mer); padding: 2px 10px; border-radius: 6px; }
   .carte-form { background: var(--chaux); color: var(--encre); border-radius: 220px 220px 16px 16px; padding: 72px clamp(22px, 4vw, 40px) 32px; }

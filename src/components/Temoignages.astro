@@ -1,0 +1,35 @@
+---
+// Bloc de témoignages. Chaque témoignage du Sheet (onglet « temoignages »)
+// indique dans la colonne « pages » où il s'affiche : accueil, formations,
+// menopause, webinaire, entreprise, consultation (séparés par des virgules).
+// La section disparaît s'il n'y a aucun témoignage publié pour la page.
+import { TEMOIGNAGES } from '../data/cms';
+interface Props { page: string; titre: string; fond?: string; max?: number; id?: string }
+const { page, titre, fond = '', max = 6, id = 'titre-temoignages' } = Astro.props;
+const liste = TEMOIGNAGES
+  .filter((t) => (t.pages ?? '').split(',').map((p: string) => p.trim()).includes(page))
+  .slice(0, max);
+---
+{liste.length > 0 && (
+  <section class={`section ${fond}`} aria-labelledby={id}>
+    <div class="conteneur">
+      <h2 id={id} class="titre-temoignages">{titre}</h2>
+      <div class="temoignages">
+        {liste.map((t) => (
+          <figure data-reveal>
+            <blockquote>« {t.texte} »</blockquote>
+            <figcaption><strong>{t.prenom}</strong>{t.metier && <span>, {t.metier}</span>}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+<style>
+  .titre-temoignages { text-align: center; margin-bottom: 32px; }
+  .temoignages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  figure { margin: 0; background: var(--blanc); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
+  blockquote { margin: 0; font-size: 1.02rem; line-height: 1.55; }
+  figcaption { font-size: .9rem; color: var(--olivier-profond); }
+  @media (max-width: 600px) { .temoignages { grid-template-columns: 1fr; } }
+</style>
