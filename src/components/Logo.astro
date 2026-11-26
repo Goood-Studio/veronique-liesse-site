@@ -1,32 +1,15 @@
 ---
-// Le logotype de la charte : disque terre cuite + rameau d'olivier, nom en minuscules.
-// Version 20/11 (provisoire) : feuilles allongées, olives en couleur, d'après la
-// nouvelle version d'Anne-Charlotte. À remplacer par son fichier SVG dès réception.
+// Logo officiel (idée 2 horizontale, validée le 26/11/2026) : rameau d'olivier
+// + « Véronique Liesse » + NUTRITION · MICROBIOTE. Fichiers vectoriels dans
+// public/img/logo/ (version normale, version claire pour fonds mer/olivier,
+// rameau seul). Texte vectorisé : aucune police à charger.
+import { u } from '../data/site';
 interface Props { clair?: boolean }
 const { clair = false } = Astro.props;
+const src = u(`/img/logo/logo-veronique-liesse${clair ? '-clair' : ''}.svg`);
 ---
-<span class={`logo ${clair ? 'clair' : ''}`}>
-  <span class="disque" aria-hidden="true">
-    <svg viewBox="0 0 64 64" width="26" height="26"><path d="M8 57 C 21 45, 34 31, 56 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="15" cy="39" rx="11" ry="2.7" transform="rotate(-70 15 39)" fill="currentColor"/><ellipse cx="27" cy="48" rx="11" ry="2.7" transform="rotate(-14 27 48)" fill="currentColor"/><ellipse cx="27" cy="25" rx="11" ry="2.7" transform="rotate(-72 27 25)" fill="currentColor"/><ellipse cx="40" cy="35" rx="11" ry="2.7" transform="rotate(-16 40 35)" fill="currentColor"/><ellipse cx="52" cy="13" rx="9" ry="2.5" transform="rotate(-45 52 13)" fill="currentColor"/><ellipse cx="33" cy="41" rx="3.6" ry="4.4" transform="rotate(-30 33 41)" fill="#D3A04F"/><ellipse cx="45" cy="26" rx="3.2" ry="4" transform="rotate(-30 45 26)" fill="#6B7140"/><ellipse cx="21" cy="52" rx="3" ry="3.7" transform="rotate(-30 21 52)" fill="#E9DCC7"/></svg>
-  </span>
-  <span class="mots">
-    <span class="nom">véronique liesse</span>
-    <span class="sous">Nutrition · Micronutrition</span>
-  </span>
-</span>
+<img class="logo" src={src} width="2894" height="642" alt="Véronique Liesse, nutrition et microbiote" decoding="async" />
 <style>
-  .logo { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
-  .disque { width: 42px; height: 42px; border-radius: 50%; background: var(--terre-cuite); color: var(--chaux); display: grid; place-items: center; flex: none; }
-  .mots { display: grid; line-height: 1.05; }
-  .nom { font-family: var(--font-titre); font-size: 1.2rem; color: var(--mer); }
-  .sous { font-size: .64rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--olivier-profond); margin-top: 3px; }
-  .clair .nom { color: var(--chaux); }
-  @media (max-width: 400px) {
-    .logo { gap: 8px; }
-    .disque { width: 36px; height: 36px; }
-    .disque svg { width: 22px; height: 22px; }
-    .nom { font-size: 1.05rem; }
-    .sous { font-size: .56rem; letter-spacing: .12em; }
-  }
-  .clair .sous { color: var(--sable); }
+  .logo { display: block; height: 52px; width: auto; max-width: 100%; }
+  @media (max-width: 400px) { .logo { height: 42px; } }
 </style>
